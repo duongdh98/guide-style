@@ -148,3 +148,149 @@ Khi định nghĩa trong file .cc  không cần được tham chiếu tới
 ```sh
 ```
 ### <> _Nonmember, Static Member, and Global Functions_
+
+  - Non-member function : luôn luôn appears bên ngoài class
+  Member function : nếu muốn appears bên ngoài class thì cần thêm tên class phía trước.
+
+    ```SH
+    // No-member function
+      int myfunction (int a, int b)
+      {
+        ..//details of this implementation
+      }
+      // Member function
+      int myarray::myfunction(int a, int b)
+      {
+        ...//details of this implementation
+          //note: you need the protype of myfunction in the body of myarray
+      }
+
+      int main()
+      {
+        int i;
+        myarray a;  //declare a myarray object
+
+        i=myfunction(3,2);  //invoking the non-member function
+        i=a.myfunction(3,2); //invoking the member function
+      }
+    ```
+
+```sh
+```
+### <> _Local Variables_
+Đặt vị trí các biến ở phạm vi hẹp nhất nếu có thể
+
+  - Bad -- initialization separate from declaration.
+    ```sh
+      int i;
+      i = f();
+    ```
+  - Prefer -- initializing using brace initialization.
+    ```sh
+      std::vector<int> v;
+      v.push_back(1);
+      v.push_back(2);
+    ```
+  - Good -- v starts initialized.
+    ```sh
+      std::vecter<int> v = {1, 2};
+    ```
+
+Các biến dùng trong câu lệnh If, while, for được define ở trong câu lệnh để phạm vi của biến ở trong câu lệnh đó
+
+  ```sh
+    while (const char* p = strchr(str, '/')) str = p + 1;
+  ```
+
+Nếu biến là object , khởi tạo nó trước khi gọi và sau khi kết thúc qúa trình xử lý trả vể gía trị ban đầu của object đó .
+
+  - Inefficient( Không hiệu qủa ) implementation:
+    ```sh
+      for (int i = 0; i < 1000000; ++i) {
+        Foo f;  // My ctor and dtor get called 1000000 times each.
+        f.DoSomething(i);
+      }
+    ```
+  - Efficient( Hiệu qủa ) implementation
+    ```sh
+      Foo f;  // My ctor and dtor get called once each.
+      for (int i = 0; i < 1000000; ++i) {
+        f.DoSomething(i);
+      }
+    ```
+
+```sh
+```
+### <> _Static and Global Variables_
+Decision on destruction( Sự phá hủy )
+- Allowed :
+  ```sh
+    const int kNum = 10;  // allowed
+
+    struct X { int n; };
+    const X kX[] = {{1}, {2}, {3}};  // allowed
+
+    void foo() {
+      static const char* const kMessages[] = {"hello", "world"};  // allowed
+    }
+
+    // allowed: constexpr guarantees trivial destructor
+    constexpr std::array<int, 3> kArray = {{1, 2, 3}};
+  ```
+- Bad: non-trivial destructor
+  ```sh
+    const std::string kFoo = "foo";
+
+    // bad for the same reason, even though kBar is a reference (the
+    // rule also applies to lifetime-extended temporary objects)
+    const std::string& kBar = StrCat("a", "b", "c");
+
+    void bar() {
+      // bad: non-trivial destructor
+      static std::map<int, int> kData = {{1, 0}, {2, 0}, {3, 0}};
+    }
+  ```
+Decision on initialization( Sự khởi tạo )
+- Khởi tạo indeterminate ̣(không xác định) : ( Trừ khởi tạo đầu tiên ).
+  ```sh
+    int n = 5;    // fine
+    int m = f();  // ? (depends on f)
+    Foo x;        // ? (depends on Foo::Foo)
+    Bar y = g();  // ? (depends on g and on Bar::Bar)`
+  ```
+- Khời tạo constant ( Xác định ).
+  ```sh
+    struct Foo { constexpr Foo(int) {} };
+
+    int n = 5;  // fine, 5 is a constant expression
+    Foo x(2);   // fine, 2 is a constant expression and the chosen    constructor is constexpr
+    Foo a[] = { Foo(1), Foo(2), Foo(3) };  // fine
+  ```
+- Khởi tạo có vấn đề .
+  ```sh
+    // Some declarations used below.
+    time_t time(time_t*);      // not constexpr!
+    int f();                   // not constexpr!
+    struct Bar { Bar() {} };
+
+    // Problematic initializations.
+    time_t m = time(nullptr);  // initializing expression not a constant expression
+    Foo y(f());                // ditto
+    Bar b;                     // chosen constructor Bar::Bar() not constexpr
+  ```
+- Khởi tạo biến động ( Không khuyến khích khởi tạo biến động, nối chung là cấm , tuy nhiên cho phép khởi tạo động nếu nếu qúa trình khởi tạo của nó không ảnh hưởng tới các khởi tạo khác )
+  ```sh
+    int p = getpid();  // allowed, as long as no other static variable
+      // uses p in its own initialization
+  ```
+```sh
+```
+### <> _Thread_local Variables_
+Các biến thread_local không được khai báo bên trong một hàm mà được khởi tạo bằng mộ́t hằng số thời gian biên dịch thực sự và điều này thực thi bằng việc sử dụng các thuộc tính ABSL_CONST_INIT.
+  ```sh
+    ABSL_CONST_INIT thread_local Foo foo = ...;
+  ```
+```sh
+```
+## _Classes:_
+### <> _Doing Work in Constructors_
