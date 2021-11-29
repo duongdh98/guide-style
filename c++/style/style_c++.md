@@ -294,3 +294,273 @@ Các biến thread_local không được khai báo bên trong một hàm m
 ```
 ## _Classes:_
 ### <> _Doing Work in Constructors_
+  - Có thể thực hiện khởi tạo tuỳ ý ở bất kì đâu trong Constructors .
+    > Constructor :  là một loại hàm thành viên đặc biệt của class, được gọi tự động khi một đối tượng của class đó được khởi tạo. Các constructors thường được sử dụng để khởi tạo các biến thành viên của class theo các giá trị mặc định phù hợp hoặc do người dùng cung cấp, hoặc để thực hiện bất kỳ các bước thiết lập cần thiết nào cho class (ví dụ: Mở file hoặc cơ sở dữ liệu).
+```sh
+```
+### <> _Implicit Conversions_
+  - Implicit Conversions ̣(Chuyển đổi ngầm định) : Cho phép Một đối tưởđng của một lọai (called the source type)  được sử dụng một loạui khác (called the destination type) . Giống như truyền cho một số kiểu số int cho function chứa biến double.
+  > Read more: https://google.github.io/styleguide/cppguide.html#Implicit_Conversions
+```sh
+```
+### <> _Copyable and Movable Types_
+  - <>
+    > Read more : https://google.github.io/styleguide/cppguide.html#Copyable_Movable_Types
+```sh
+```
+## _Structs vs. Classes:_
+Struct được sử dụng cho object thụ động để chứa data. Struct and Class hoạt động giống nhau trong c++.
+  - Define naming rules :
+    ```sh
+      std::string table_name;  // OK - lowercase with underscore.
+      std::string tableName;   // Bad - mixed case.
+    ```
+### <> _Structs vs. Pairs and Tuples_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Structs_vs._Tuples
+### <> _Inheritance_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Inheritance
+### <> _Operator Overloading_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Operator_Overloading
+### <> _Access Control_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Access_Control
+### <> _Declaration Order_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Declaration_Order
+
+## _Function :_
+### <> _Inputs and Outputs_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Inputs_and_Outputs
+### <> _Write Short Functiond_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Write_Short_Functions
+### <> _Function Overloading_
+Bạn có thể viết function có const std::String& và overload với const char*
+  - Ví dụ:
+    ```sh
+      class MyClass {
+      public:
+        void Analyze(const std::string &text);
+        void Analyze(const char *text, size_t textlen);
+      };
+    ```
+    > Read more : https://google.github.io/styleguide/cppguide.html#Function_Overloading
+### <> _Default Arguments_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Default_Arguments
+### <> _Trailing Return Type Syntax_
+C++ chấp nhận hai different forms of function declarations
+  - Ví dụ :
+    ```sh
+      int foo(int x);
+      // Tương đương với <>
+      auto foo(int x) -> int;
+
+      // template:
+      template <typename T, typename U>
+      auto add(T t, U u) -> decltype(t + u);
+
+      template <typename T, typename U>
+      decltype(declval<T&>() + declval<U&>()) add(T t, U u);
+    ```
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#trailing_return
+## _Google-Specific Magic :_
+### <> _Ownership and Smart Pointers_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Ownership_and_Smart_Pointers
+### <> _cpplint_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#cpplint
+## _Other C++ Features :_
+### <> _Rvalue References_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Rvalue_references
+### <> _Friends_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Friends
+### <> _Exceptions_
+  - <>
+    > read more: https://google.github.io/styleguide/cppguide.html#Exceptions
+### <> _noexcept_
+  - <>
+    > read more: https://google.github.io/styleguide/cppguide.html#noexcept
+### <> _Run-Time Type Information (RTTI)_
+  - Wrong track
+    ```sh
+      if (typeid(*data) == typeid(D1)) {
+        ...
+      } else if (typeid(*data) == typeid(D2)) {
+        ...
+      } else if (typeid(*data) == typeid(D3)) {
+        ...
+    ```
+  - <>
+    > read more: https://google.github.io/styleguide/cppguide.html#Run-Time_Type_Information__RTTI_
+### <> _Casting_
+  - <>
+    > read more: https://google.github.io/styleguide/cppguide.html#Casting
+### <> _Stream_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Streams
+### <> _Preincrement and Predecrement_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Preincrement_and_Predecrement
+### <> _Use of const :_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Use_of_const
+### <> _Use of constexpr_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Use_of_constexpr
+### <> _Integer Types_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Integer_Types
+### <> _64-bit Portability_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#64-bit_Portability
+### <> _Preprocessor Macros_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Preprocessor_Macros
+### <> _ and nullptr/NULL_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#0_and_nullptr/NULL
+### <> _sizeof_
+Ưu tiên thay thế sizeof(varname) bằng sizeof(type)
+  - Sizeof(varname): Sử dụng khi cần lấy kích thước của một biến cụ thể,  sizeof(varname) sẽ update lại nếu có bấy kì thay đổi nào về type cũa biết hiện hành hoặc sau đó .
+  - Sizeof(type): Sử dụng cho code không liên quan tới biến cụ thể nào.
+  - ví dụ :
+    ```sh
+      // it ok
+      MyStruct data;
+      memset(&data, 0, sizeof(data));
+
+      // not ok
+      memset(&data, 0, sizeof(MyStruct));
+
+      if (raw_size < sizeof(int)) {
+        LOG(ERROR) << "compressed record not big enough for count: " << raw_size;
+        return false;
+      }
+    ```
+```sh
+```
+### <> _Type Deduction (including auto)_
+Sử dụng khi và chỉ khi nó giúp code trở nên dễ đọc hơn chi người đọc hoặc giúp code được safer, traśnh sử dụng đơn thuần tránh viết một cách không rõ ràng.
+  - Function template argument deduction: Hàm vẫn dc gọi với không có đối số rõ ràng
+    ```sh
+      template <typename T>
+      void f(T t);
+
+      f(0);  // Invokes f<int>(0)
+    ```
+  - Auto variable declarations : Khởi tạo biến động với đối số tự động theo rules.
+    ```sh
+      auto a = 42;  // a is an int
+      auto& b = a;  // b is an int&
+      auto c = b;   // c is an int
+      auto d{42};   // d is an int, not a std::initializer_list<int>
+    ```
+  - Function return type deduction: Return kiểu dữ liệu tự động
+    ```sh
+      auto f() { return 0; }  // The return type of f is int
+    ```
+  - Generic lambdas:
+    > A lambda : Lambda hay còn gọi là hàm nặc danh, nó có thể dùng để truyền vào 1 hàm khác và sử dụng 1 lần. Khác với các cách thông thường, định nghĩa hàm sau đó dùng tên hàm truyền vào 1 hàm khác.
+   thức lambda (hàm) vào hàm khác
+      >> Read more : https://www.stdio.vn/modern-cpp/c-11-lambda-8kmLy1
+    ```sh
+      // Sort `vec` in decreasing order
+      std::sort(vec.begin(), vec.end(), [](auto lhs, auto rhs) { return lhs > rhs; });
+    ```
+  - Lambda init captures :
+    > Capture:
+      1. "[]"	 Không được phép sử dụng bất kỳ biến bên ngoài
+      2. "[=]"	Được phép sử dụng các biến bên ngoài, nhưng là dạng sao chép giá trị của 3.biến đó (by value)
+      3. "[&]"	Được phép sử dụng chính biến đó (by reference)
+      4. "[=,&a]"	Đây là 1 dạng nâng cao, có thể cho phép tất cả các biến khác được sử dụng giá trị, và chỉ định thêm cho biến a được sử dụng chính nó (by reference)
+      5. "[this]"	Cho phép sử dụng this (OOP) như 1 bản sao, có thể thử các dạng capture trên
+    ```sh
+      [x = 42, y = "foo"] { ... }  // x is an int, and y is a const char*
+    ```
+  - Class template argument deduction and Structured bindings
+     ```sh
+      auto [iter, success] = my_map.insert({key, value});
+      if (!success) {
+        iter->second = value;
+      }
+     ```
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Type_deduction
+### <> _Class Template Argument Deduction_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#CTAD
+### <> _Designated Initializers_
+  - <>
+  ```sh
+    struct Point {
+    float x = 0.0;
+    float y = 0.0;
+    float z = 0.0;
+    };
+
+    Point p = {
+      .x = 1.0,
+      .y = 2.0,
+      // z will be 0.0
+    };
+  ```
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Designated_initializers
+### <> _Lambda Expressions_
+  - <>
+    > read more: https://google.github.io/styleguide/cppguide.html#Lambda_expressions
+### <> _Template Metaprogramming_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Template_metaprogramming
+### <> _Boost_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Boost
+### <> _Other C++ Features_
+  - <>
+    > read more: https://google.github.io/styleguide/cppguide.html#Other_Features
+### <> _Nonstandard Extensions_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Nonstandard_Extensions
+### <> _Aliases_
+Đặt tên theo bí danh của thực thể khác
+  - Ví dụ :
+    ```sh
+      typedef Foo Bar;
+      using Bar = Foo;
+      using other_namespace::Foo;
+    ```
+  - Vị dụ :
+    ```sh
+      // It is OK
+      namespace mynamespace {
+      // Used to store field measurements. DataPoint may change from Bar* to some internal type.
+      // Client code should treat it as an opaque pointer.
+      using DataPoint = ::foo::Bar*;
+
+      // A set of measurements. Just an alias for user convenience.
+      using TimeSeries = std::unordered_set<DataPoint, std::hash<DataPoint>, DataPointComparator>;
+      }  // namespace mynamespace
+
+      // Not ok
+      namespace mynamespace {
+      // Bad: none of these say how they should be used.
+      using DataPoint = ::foo::Bar*;
+      using ::std::unordered_set;  // Bad: just for local convenience
+      using ::std::hash;           // Bad: just for local convenience
+      typedef unordered_set<DataPoint, hash<DataPoint>, DataPointComparator> TimeSeries;
+      }  // namespace mynamespace
+    ```
+  - Using in .cc file
+    ```sh
+      // In a .cc file
+      using ::foo::Bar;
+    ```
