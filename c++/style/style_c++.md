@@ -1,5 +1,112 @@
-# Google C++ Style Guide
+# Tree
+### _> The #define Guard :_
 
+### _> Forward Declarations :_
+
+### _> Inline Functions :_
+
+### _> Names and Order of Includes :_
+
+### _> Scoping :_
+  1. Namespaces
+  2. Internal Linkage
+  3. Nonmember, Static Member, and Global Functions
+  4. Local Variables
+  5. Static and Global Variables
+  6. Thread_local Variables
+
+### _> Classes:_
+  1. Doing Work in Constructors
+  2. Implicit Conversions
+  3. Copyable and Movable Types
+
+### _> Structs vs. Classes:_
+
+### _> Function :_
+  1. Inputs and Outputs
+  2. Write Short Functiond
+  3. Function Overloading
+  4. Default Arguments
+  5. Trailing Return Type Syntax
+
+### _> Google-Specific Magic :_
+  1. Ownership and Smart Pointers
+  2. cpplint
+
+### _> Other C++ Features :_
+  1. Rvalue Reference
+  2. Friends
+  3. Exceptions
+  4. noexcept
+  5. Run-Time Type Information (RTTI)
+  6. Casting
+  7. Stream
+  8. Preincrement and Predecrement
+  9. Use of const :Use of const :
+  10. Use of constexpr
+  11. Integer Types
+  12. 64-bit Portability
+  13. Preprocessor Macros
+  14. and nullptr/NULL
+  15. sizeof
+  16. Type Deduction (including auto)
+  17. Class Template Argument Deduction
+  18. Designated Initializers
+  19. Lambda Expressions
+  20. Template Metaprogramming
+  21. Boost
+  22. Other C++ Features
+  23. Nonstandard Extensions
+  24. Aliases
+  25. Inclusive Language
+
+### _> Naming_
+  1. General Naming Rules
+  2. File Names
+  3. Variable Names
+  4. Constant Names
+  5. Function Names
+  6. Namespace Names
+  7. Enumerator Names
+  8. Macro Names
+  9. Exceptions to Naming Rules
+  10. Comment
+      - Comment Style
+      - File Comments
+      - Class Comments
+      - Function Comments
+      - Variable Comments
+      - Implementation Comments
+      - Function Argument Comments
+      - Function Argument Comments
+      - Don'ts
+      - Punctuation, Spelling, and Grammar
+      - TODO Comments
+
+### _> Formatting_
+  1. Line Length
+  2. Non-ASCII Characters
+  3. Spaces vs. Tabs
+  4. Function Declarations and Definitions
+  5. Lambda Expressions
+  6. Floating-point Literals
+  7. Function Calls
+  8. Braced Initializer List Format
+  9. Conditionals
+  10. Loops and Switch Statements
+  11. Pointer and Reference Expressions
+  12. Boolean Expressions
+  13. Return Values
+  14. Variable and Array Initialization
+  15. Preprocessor Directives
+  16. Class Formart
+  17. Constructor Initializer Lists
+  18. Namespace Formatting
+  19. Horizontal Whitespace
+  20. Vertical Whitespace
+  21. Exceptions to the Rules
+
+# Google C++ Style Guide
 ## _The #define Guard :_
 ### Tất cả các các heder file nên được #define guards , Formart symbol name nêm theo mẫu .
 ```sh
@@ -292,6 +399,7 @@ Các biến thread_local không được khai báo bên trong một hàm m
   ```
 ```sh
 ```
+
 ## _Classes:_
 ### <> _Doing Work in Constructors_
   - Có thể thực hiện khởi tạo tuỳ ý ở bất kì đâu trong Constructors .
@@ -308,6 +416,7 @@ Các biến thread_local không được khai báo bên trong một hàm m
     > Read more : https://google.github.io/styleguide/cppguide.html#Copyable_Movable_Types
 ```sh
 ```
+
 ## _Structs vs. Classes:_
 Struct được sử dụng cho object thụ động để chứa data. Struct and Class hoạt động giống nhau trong c++.
   - Define naming rules :
@@ -369,6 +478,7 @@ C++ chấp nhận hai different forms of function declarations
     ```
   - <>
     > Read more: https://google.github.io/styleguide/cppguide.html#trailing_return
+
 ## _Google-Specific Magic :_
 ### <> _Ownership and Smart Pointers_
   - <>
@@ -376,6 +486,9 @@ C++ chấp nhận hai different forms of function declarations
 ### <> _cpplint_
   - <>
     > Read more: https://google.github.io/styleguide/cppguide.html#cpplint
+
+
+
 ## _Other C++ Features :_
 ### <> _Rvalue References_
   - <>
@@ -425,7 +538,7 @@ C++ chấp nhận hai different forms of function declarations
 ### <> _Preprocessor Macros_
   - <>
     > Read more: https://google.github.io/styleguide/cppguide.html#Preprocessor_Macros
-### <> _ and nullptr/NULL_
+### <> _and nullptr/NULL_
   - <>
     > Read more: https://google.github.io/styleguide/cppguide.html#0_and_nullptr/NULL
 ### <> _sizeof_
@@ -564,3 +677,339 @@ Sử dụng khi và chỉ khi nó giúp code trở nên dễ đọc hơn c
       // In a .cc file
       using ::foo::Bar;
     ```
+### <> _Inclusive Language_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Inclusive_Language
+```sh
+```
+
+## _Naming_
+### <> _General Naming Rules_
+  - Do
+    ```sh
+      class MyClass {
+      public:
+        int CountFooErrors(const std::vector<Foo>& foos) {
+          int n = 0;  // Clear meaning given limited scope and context
+          for (const auto& foo : foos) {
+            ...
+            ++n;
+          }
+          return n;
+        }
+        void DoSomethingImportant() {
+          std::string fqdn = ...;  // Well-known abbreviation for Fully Qualified Domain Name
+        }
+      private:
+        const int kMaxAllowedConnections = ...;  // Clear meaning within context
+      };
+    ```
+  - Not Do
+    ```sh
+      class MyClass {
+      public:
+        int CountFooErrors(const std::vector<Foo>& foos) {
+          int total_number_of_foo_errors = 0;  // Overly verbose given limited scope and context
+          for (int foo_index = 0; foo_index < foos.size(); ++foo_index) {  // Use idiomatic `i`
+            ...
+            ++total_number_of_foo_errors;
+          }
+          return total_number_of_foo_errors;
+        }
+        void DoSomethingImportant() {
+          int cstmr_id = ...;  // Deletes internal letters
+        }
+      private:
+        const int kNum = ...;  // Unclear meaning within broad scope
+      };
+    ```
+  - <>
+    > Read More: https://google.github.io/styleguide/cppguide.html#General_Naming_Rules
+### <> _File Names_
+  - Do
+    ```sh
+      // classes and structs
+      class UrlTable { ...
+      class UrlTableTester { ...
+      struct UrlTableProperties { ...
+
+      // typedefs
+      typedef hash_map<UrlTableProperties *, std::string> PropertiesMap;
+
+      // using aliases
+      using PropertiesMap = hash_map<UrlTableProperties *, std::string>;
+
+      // enums
+      enum class UrlTableError { ...
+          ```
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Type_Names
+### <> _Variable Names_
+  - Common Variable names
+    ```sh
+      // OK - lowercase with underscore.
+      std::string table_name;
+
+      // Bad - mixed case.
+      std::string tableName;
+          ```
+  - Class Data Members
+    ```sh
+      class TableInfo {
+        ...
+      private:
+        std::string table_name_;  // OK - underscore at end.
+        static Pool<TableInfo>* pool_;  // OK.
+      };
+    ```
+  - Struct Data Members
+    ```sh
+      struct UrlTableProperties {
+        std::string name;
+        int num_entries;
+        static Pool<UrlTableProperties>* pool;
+      };
+    ```
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Variable_Names
+```sh
+```
+### <> _Constant Names_
+  - <>
+    ```sh
+      const int kDaysInAWeek = 7;
+      const int kAndroid8_0_0 = 24;  // Android 8.0.0
+    ```
+### <> _Function Names_
+  - <>
+    ```sh
+      AddTableEntry()
+      DeleteUrl()
+      OpenFileOrDie()
+    ```
+### <> _Namespace Names_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Namespace_Names
+### <> _Enumerator Names_
+  - Do
+    ```sh
+      enum class UrlTableError {
+        kOk = 0,
+        kOutOfMemory,
+        kMalformedInput,
+      };
+    ```
+  - Not Do
+    ```sh
+      enum class AlternateUrlTableError {
+        OK = 0,
+        OUT_OF_MEMORY = 1,
+        MALFORMED_INPUT = 2,
+      };
+    ```
+### <> _Macro Names_
+  - <>
+    ```sh
+      #define ROUND(x) ...
+      #define PI_ROUNDED 3.0
+    ```
+### <> _Exceptions to Naming Rules_
+  - <>
+    ```sh
+      bigopen()
+      function name, follows form of open()
+      uint
+      typedef
+      bigpos
+      struct or class, follows form of pos
+      sparse_hash_map
+      STL-like entity; follows STL naming conventions
+      LONGLONG_MAX
+      a constant, as in INT_MAX
+    ```
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Exceptions_to_Naming_Rules
+### <> _Comments_
+  - Comment Style
+    > Read more : https://google.github.io/styleguide/cppguide.html#Comment_Style
+  - File Comments
+    - File Comments
+    - File Contents
+    > Read more: https://google.github.io/styleguide/cppguide.html#File_Comments
+  - Class Comments
+    ```sh
+      // Iterates over the contents of a GargantuanTable.
+      // Example:
+      //    std::unique_ptr<GargantuanTableIterator> iter = table->NewIterator();
+      //    for (iter->Seek("foo"); !iter->done(); iter->Next()) {
+      //      process(iter->key(), iter->value());
+      //    }
+      class GargantuanTableIterator {
+        ...
+      };
+    ```
+    > Read more: https://google.github.io/styleguide/cppguide.html#Class_Comments
+  - Function Comments
+    - Function Declarations
+    - Function Definitions
+    > Read more: https://google.github.io/styleguide/cppguide.html#Function_Comments
+  - Variable Comments
+    - Class Data Members
+    - Class Data Members
+    > read more: https://google.github.io/styleguide/cppguide.html#Variable_Comments
+  - Implementation Comments
+    - Explanatory Comments
+    > Read more: https://google.github.io/styleguide/cppguide.html#Implementation_Comments
+  - Function Argument Comments
+    > Read more: https://google.github.io/styleguide/cppguide.html#Function_Argument_Comments
+  - Don'ts
+    > Read more: https://google.github.io/styleguide/cppguide.html#Implementation_Comment_Donts
+  - Punctuation, Spelling, and Grammar
+    > Read more: https://google.github.io/styleguide/cppguide.html#Punctuation,_Spelling_and_Grammar
+  - TODO Comments
+    > Read more: https://google.github.io/styleguide/cppguide.html#TODO_Comments
+  - <>
+    > read more: https://google.github.io/styleguide/cppguide.html#Comments
+
+## _Formatting_
+### <> _Line Length_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Line_Length
+### <> _Non-ASCII Characters_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Non-ASCII_Characters
+### <> _Spaces vs. Tabs_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Spaces_vs._Tabs
+### <> _Function Declarations and Definitions_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Function_Declarations_and_Definitions
+### <> _Lambda Expressions_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Formatting_Lambda_Expressions
+### <> _Floating-point Literals_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Floating_Literals
+### <> _Function Calls_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Function_Calls
+### <> _Braced Initializer List Format_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Braced_Initializer_List_Format
+### <> _Conditionals_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Conditionals
+### <> _Loops and Switch Statements_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Loops_and_Switch_Statements
+### <> _Pointer and Reference Expressions_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Pointer_and_Reference_Expressions
+### <> _Boolean Expressions_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Boolean_Expressions
+### <> _Return Values_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Return_Values
+### <> _Variable and Array Initialization_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Variable_and_Array_Initialization
+### <> _Preprocessor Directives_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Preprocessor_Directives
+### <> _Class Formart_
+  - <>
+    > Read more:  https://google.github.io/styleguide/cppguide.html#Class_Format
+### <> _Constructor Initializer Lists_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Constructor_Initializer_Lists
+### <> _Namespace Formatting_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Namespace_Formatting
+### <> _Horizontal Whitespace_
+  - General
+    ```sh
+      int i = 0;  // Two spaces before end-of-line comments.
+
+      void f(bool b) {  // Open braces should always have a space before them.
+        ...
+      int i = 0;  // Semicolons usually have no space before them.
+      // Spaces inside braces for braced-init-list are optional.  If you use them,
+      // put them on both sides!
+      int x[] = { 0 };
+      int x[] = {0};
+
+      // Spaces around the colon in inheritance and initializer lists.
+      class Foo : public Bar {
+      public:
+        // For inline function implementations, put spaces between the braces
+        // and the implementation itself.
+        Foo(int b) : Bar(), baz_(b) {}  // No spaces inside empty braces.
+    ```
+  - Loops and Conditionals
+    ```sh
+      if (b) {          // Space after the keyword in conditions and loops.
+      } else {          // Spaces around else.
+      }
+      while (test) {}   // There is usually no space inside parentheses.
+      switch (i) {
+      for (int i = 0; i < 5; ++i) {
+      // Loops and conditions may have spaces inside parentheses, but this
+      // is rare.  Be consistent.
+      switch ( i ) {
+      if ( test ) {
+      for ( int i = 0; i < 5; ++i ) {
+      // For loops always have a space after the semicolon.  They may have a space
+      // before the semicolon, but this is rare.
+      for ( ; i < 5 ; ++i) {
+        ...
+
+      // Range-based for loops always have a space before and after the colon.
+      for (auto x : counts) {
+        ...
+      }
+      switch (i) {
+        case 1:         // No space before colon in a switch case.
+          ...
+        case 2: break;  // Use a space after a colon if there's code after it.
+    ```
+  - Operators
+    ```sh
+      // Assignment operators always have spaces around them.
+      x = 0;
+
+      // Other binary operators usually have spaces around them, but it's
+      // OK to remove spaces around factors.  Parentheses should have no
+      // internal padding.
+      v = w * x + y / z;
+      v = w*x + y/z;
+      v = w * (x + z);
+
+      // No spaces separating unary operators and their arguments.
+      x = -5;
+      ++x;
+      if (x && !y)
+        ...
+    ```
+  - Templates and Casts
+    ```sh
+      // No spaces inside the angle brackets (< and >), before
+      // <, or between >( in a cast
+      std::vector<std::string> x;
+      y = static_cast<char*>(x);
+
+      // Spaces between type and pointer are OK, but be consistent.
+      std::vector<char *> x;
+    ```
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Horizontal_Whitespace
+### <> _Vertical Whitespace_
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Vertical_Whitespace
+### <> _Exceptions to the Rules_
+  - Existing Non-conformant Code
+    > Read more: https://google.github.io/styleguide/cppguide.html#Existing_Non-conformant_Code
+  - Windows Code
+    > read more: https://google.github.io/styleguide/cppguide.html#Windows_Code
+  - <>
+    > Read more: https://google.github.io/styleguide/cppguide.html#Exceptions_to_the_Rules
