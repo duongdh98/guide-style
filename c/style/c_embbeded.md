@@ -250,7 +250,7 @@
           modified (e.g., in a struct overlay for memory-mapped I/O <br>
           peripheral registers), and <br>
   
-          _d._ As a strongly typed alternative to #define for numerical constants. <br>
+          _d._ As a strongly typed alternative to #define for numerical constants.
 
       3. The volatile keyword shall be used whenever appropriate.  Examples <br> 
       include: <br>
@@ -852,847 +852,980 @@
 
   - ### <a id="floating-point"></a> 5.4 Floating Point  
 
-Rules: 
-a. Avoid the use of floating point constants and variables whenever possible.  
-Fixed-point math may be an alternative. 
-b. When floating point calculations are necessary: 
-i. Use the C99 type names float32_t, float64_t, and float128_t. 
-ii. Append an ‘f’ to all single-precision constants (e.g., pi = 3.141592f). 
-iii. Ensure that the compiler supports double precision, if your math 
-depends on it. 
-iv. Never test for equality or inequality of floating point values.  
-v. Always invoke the isfinite() macro to check that prior calculations 
-have resulted in neither INFINITY nor NAN.  
-Example: 
-#include <limits.h> 
-#if (DBL_DIG < 10)  // Ensure the compiler supports double precision. 
-#   error “Double precision is not available!” 
-#endif 
+    **Rules:** 
+    1. Avoid the use of floating point constants and variables whenever possible.  <br>
+    Fixed-point math may be an alternative. 
+    
+    2. When floating point calculations are necessary: <br>
+
+        _a._ Use the C99 type names float32_t, float64_t, and float128_t. <br>
+
+        _b._ Append an ‘f’ to all single-precision constants (e.g., pi = 3.141592f). <br>
+
+        _c._ Ensure that the compiler supports double precision, if your math <br>
+        depends on it. 
+
+        _d._ Never test for equality or inequality of floating point values.  <br>
+
+        _e._ Always invoke the isfinite() macro to check that prior calculations <br>
+        have resulted in neither INFINITY nor NAN.  
+
+    **Example:** 
+    ```sh
+      #include <limits.h> 
+      #if (DBL_DIG < 10)  // Ensure the compiler supports double precision. 
+      #   error “Double precision is not available!” 
+      #endif
+    ``` 
  
-Reasoning: A large number of risks of defects stem from incorrect use of floating 
-point arithmetic.8  By default, C promotes all floating-point constants to double 
-precision, which may be inefficient or unsupported on the target platform.  
-However, many microcontrollers do not have any hardware support for floating 
-point math.  The compiler may not warn of these incompatibilities, instead 
-performing the requested numerical operations by linking in a large (typically a few 
-kilobytes of code) and slow (numerous instruction cycles per operation) floating-
-point emulation library. 
-Enforcement: These rules shall be enforced during code reviews.
+    **Reasoning:** A large number of risks of defects stem from incorrect use of floating <br>
+    point arithmetic.8  By default, C promotes all floating-point constants to double <br>
+    precision, which may be inefficient or unsupported on the target platform.  <br>
+    However, many microcontrollers do not have any hardware support for floating <br>
+    point math.  The compiler may not warn of these incompatibilities, instead <br>
+    performing the requested numerical operations by linking in a large (typically a few <br>
+    kilobytes of code) and slow (numerous instruction cycles per operation) floating- <br>
+    point emulation library. <br>
+
+    **Enforcement:** These rules shall be enforced during code reviews. <br>
 
   - ### <a id="structures-and-unions"></a> 5.5 Structures and Unions  
 
-Rules: 
-a. Appropriate care shall be taken to prevent the compiler from 
-inserting padding bytes within struct or union types used to 
-communicate to or from a peripheral or over a bus or network to 
-another processor. 
-b. Appropriate care shall be taken to prevent the compiler from 
-altering the intended order of the bits within bit-fields. 
-Example: 
-typedef struct  
-{ 
-    uint16_t  count;             // offset 0  
-    uint16_t  max_count;         // offset 2  
-    uint16_t  _unused;           // offset 4  
- 
-    uint16_t  enable      : 2;   // offset 6 bits 15-14 
-    uint16_t  b_interrupt : 1;   // offset 6 bit  13 
-    uint16_t  _unused1    : 7;   // offset 6 bits 12-6 
-    uint16_t  b_complete  : 1;   // offset 6 bit  5 
-    uint16_t  _unused2    : 4;   // offset 6 bits 4-1 
-    uint16_t  b_periodic  : 1;   // offset 6 bit  0 
- 
-} timer_reg_t; 
- 
-// Preprocessor check of timer register layout byte count.  
-#if ((8 != sizeof(timer_reg_t)) 
-#   error “timer_reg_t struct size incorrect (expected 8 bytes)” 
-#endif
+    **Rules:** 
+    1. Appropriate care shall be taken to prevent the compiler from <br>
+    inserting padding bytes within struct or union types used to <br>
+    communicate to or from a peripheral or over a bus or network to <br>
+    another processor. 
+    
+    2. Appropriate care shall be taken to prevent the compiler from <br>
+    altering the intended order of the bits within bit-fields. <br>
+    
+    **Example:**
+    ```sh 
+      typedef struct  
+      { 
+          uint16_t  count;             // offset 0  
+          uint16_t  max_count;         // offset 2  
+          uint16_t  _unused;           // offset 4  
+      
+          uint16_t  enable      : 2;   // offset 6 bits 15-14 
+          uint16_t  b_interrupt : 1;   // offset 6 bit  13 
+          uint16_t  _unused1    : 7;   // offset 6 bits 12-6 
+          uint16_t  b_complete  : 1;   // offset 6 bit  5 
+          uint16_t  _unused2    : 4;   // offset 6 bits 4-1 
+          uint16_t  b_periodic  : 1;   // offset 6 bit  0 
+      
+      } timer_reg_t; 
+      
+      // Preprocessor check of timer register layout byte count.  
+      #if ((8 != sizeof(timer_reg_t)) 
+      #   error “timer_reg_t struct size incorrect (expected 8 bytes)” 
+      #endif
+    ```
 
-Reasoning: Owing to differences across processor families and loose definitions in 
-the ISO C language standards, there is a tremendous amount of implementation-
-defined behavior in the area of structures and unions.  Bit-fields, in particular, suffer 
-from severe portability problems, including the lack of a standard bit ordering and 
-no official support for the fixed-width integer types they so often call out to be used 
-with.  The methods available to check the layout of such data structures include 
-static assertions or other compile-time checks as well as the use of preprocessor 
-directives, e.g., to select one of two competing struct layouts based on the compiler. 
-Enforcement: These rules shall be enforced during code reviews.  
+    **Reasoning:** Owing to differences across processor families and loose definitions in <br>
+    the ISO C language standards, there is a tremendous amount of implementation- <br>
+    defined behavior in the area of structures and unions.  Bit-fields, in particular, suffer <br>
+    from severe portability problems, including the lack of a standard bit ordering and <br>
+    no official support for the fixed-width integer types they so often call out to be used <br> 
+    with.  The methods available to check the layout of such data structures include <br>
+    static assertions or other compile-time checks as well as the use of preprocessor <br>
+    directives, e.g., to select one of two competing struct layouts based on the compiler. <br> 
+    
+    **Enforcement:** These rules shall be enforced during code reviews.  
 
   - ### <a id="booleans"></a> 5.6 Booleans 
 
-Rules: 
-a. Boolean variables shall be declared as type bool. 
-b. Non-Boolean values shall be converted to Boolean via use of relational 
-operators (e.g., < or !=), not via casts. 
-Example: 
-#include <stdbool.h> 
-... 
- 
-    bool b_in_motion = (0 != speed_in_mph); 
- 
-Reasoning: The C90 standard did not define a data type for Boolean variables and C 
-programmers have widely treated any non-zero integer value as true.  The C99 
-language standard is backward compatible with this old style, but also introduced a 
-new data type for Boolean variables along with new constants true and false in the 
-stdbool.h header file. 
-Enforcement: These rules shall be enforced during code reviews. 
+    **Rules:** 
+    1. Boolean variables shall be declared as type bool. 
+    
+    2. Non-Boolean values shall be converted to Boolean via use of relational <br>
+    operators (e.g., < or !=), not via casts. <br>
+    
+    **Example:**
+    ```sh 
+      #include <stdbool.h> 
+      ... 
+      
+          bool b_in_motion = (0 != speed_in_mph); 
+    ```
+    
+    **Reasoning:** The C90 standard did not define a data type for Boolean variables and C <br>
+    programmers have widely treated any non-zero integer value as true.  The C99 <br>
+    language standard is backward compatible with this old style, but also introduced a <br>
+    new data type for Boolean variables along with new constants true and false in the <br>
+    stdbool.h header file. <br>
+    
+    **Enforcement:** These rules shall be enforced during code reviews. <br>
 
 ## <a id="procedure-rules"></a> 6 Procedure Rules  
   - ### <a id="naming-conventions"></a> 6.1 Naming Conventions  
 
-Rules: 
-a. No procedure shall have a name that is a keyword of any standard 
-version of the C or C++ programming language.  Restricted names 
-include interrupt, inline, class, true, false, public, private, 
-friend, protected, and many others. 
-b. No procedure shall have a name that overlaps a function in the C 
-Standard Library.  Examples of such names include strlen, atoi, 
-and memset. 
-c. No procedure shall have a name that begins with an underscore. 
-d. No procedure name shall be longer than 31 characters. 
-e. No function name shall contain any uppercase letters. 
-f. No macro name shall contain any lowercase letters. 
-g. Underscores shall be used to separate words in procedure names. 
-h. Each procedure’s name shall be descriptive of its purpose.  Note that 
-procedures encapsulate the “actions” of a program and thus benefit from the 
-use of verbs in their names (e.g., adc_read()); this “noun-verb” word 
-ordering is recommended.  Alternatively, procedures may be named 
-according to the question they answer (e.g., led_is_on()). 
-i. The names of all public functions shall be prefixed with their module name 
-and an underscore (e.g., sensor_read()). 
-Example: See Appendix D. 
-Reasoning: Good function names make reviewing and maintaining code easier (and 
-thus cheaper).  The data (variables) in programs are nouns.  Functions manipulate 
-data and are thus verbs.  The use of module prefixes is in keeping with the 
-important goal of encapsulation and helps avoid procedure name overlaps. 
-Enforcement: Compliance with these naming rules shall be established in the 
-detailed design phase and be enforced during code reviews.
+    **Rules:** 
+    1. No procedure shall have a name that is a keyword of any standard <br>
+    version of the C or C++ programming language.  Restricted names <br>
+    include interrupt, inline, class, true, false, public, private, <br>
+    friend, protected, and many others. <br>
+    
+    2. No procedure shall have a name that overlaps a function in the C <br>
+    Standard Library.  Examples of such names include strlen, atoi, <br>
+    and memset. 
+    
+    3. No procedure shall have a name that begins with an underscore. <br>
+    
+    4. No procedure name shall be longer than 31 characters. <br>
+    
+    5. No function name shall contain any uppercase letters. <br>
+    
+    6. No macro name shall contain any lowercase letters. <br>
+    
+    7. Underscores shall be used to separate words in procedure names. <br>
+    
+    8. Each procedure’s name shall be descriptive of its purpose.  Note that <br>
+    procedures encapsulate the “actions” of a program and thus benefit from the <br>
+    use of verbs in their names (e.g., adc_read()); this “noun-verb” word <br> 
+    ordering is recommended.  Alternatively, procedures may be named <br>
+    according to the question they answer (e.g., led_is_on()). <br>
+    
+    9. The names of all public functions shall be prefixed with their module name <br>
+    and an underscore (e.g., sensor_read()). 
+    
+    **Example:** See Appendix D. 
+    
+    **Reasoning:** Good function names make reviewing and maintaining code easier (and <br>
+    thus cheaper).  The data (variables) in programs are nouns.  Functions manipulate <br>
+    data and are thus verbs.  The use of module prefixes is in keeping with the <br>
+    important goal of encapsulation and helps avoid procedure name overlaps. <br>
+    
+    **Enforcement:** Compliance with these naming rules shall be established in the <br>
+    detailed design phase and be enforced during code reviews. <br>
 
   - ### <a id="functions"></a> 6.2 Functions  
 
-Rules: 
-a. All reasonable effort shall be taken to keep the length of each function limited 
-to one printed page, or a maximum of 100 lines. 
-b. Whenever possible, all functions shall be made to start at the top of a printed 
-page, except when several small functions can fit onto a single page.9 
-c. It is a preferred practice that all functions shall have just one exit point and it 
-shall be via a return at the bottom of the function. 
-d. A prototype shall be declared for each public function in the module 
-header file. 
-e. All private functions shall be declared static.  
-f. Each parameter shall be explicitly declared and meaningfully named. 
+    **Rules:** 
+    1. All reasonable effort shall be taken to keep the length of each function limited <br>
+    to one printed page, or a maximum of 100 lines. <br>
+    
+    2. Whenever possible, all functions shall be made to start at the top of a printed <br>
+    page, except when several small functions can fit onto a single page.9 <br>
+    
+    3. It is a preferred practice that all functions shall have just one exit point and it <br>
+    shall be via a return at the bottom of the function. <br>
+    
+    4. A prototype shall be declared for each public function in the module <br> 
+    header file. 
+    
+    5. All private functions shall be declared static.  
+    
+    6. Each parameter shall be explicitly declared and meaningfully named. 
 
-Example: 
-int  
-state_change (int event) 
-{ 
-    int result = ERROR; 
- 
-    if (EVENT_A == event) 
-    { 
-         result = STATE_A; 
-    } 
-    else 
-    { 
-        result = STATE_B; 
-    } 
-    return (result); 
-}  
-Reasoning: Code reviews take place at the function level and often on paper.  Each 
-function should thus ideally be visible on a single printed page, so that flipping 
-papers back and forth does not distract the reviewers.   
-Multiple return statements should be used only when it improves the 
-readability of the code. 
-Enforcement: Compliance with these rules shall be checked during code reviews.  
+    **Example:** 
+    ```sh
+      int  
+      state_change (int event) 
+      { 
+          int result = ERROR; 
+      
+          if (EVENT_A == event) 
+          { 
+              result = STATE_A; 
+          } 
+          else 
+          { 
+              result = STATE_B; 
+          } 
+          return (result); 
+      }  
+    ```
+
+    **Reasoning:** Code reviews take place at the function level and often on paper.  Each <br>
+    function should thus ideally be visible on a single printed page, so that flipping <br>
+    papers back and forth does not distract the reviewers.   <br>
+    Multiple return statements should be used only when it improves the <br>
+    readability of the code. <br>
+
+    **Enforcement:** Compliance with these rules shall be checked during code reviews. <br> 
 
   - ### <a id=""></a> 6.3 Function-Like Macros 
 
-Rules: 
-a. Parameterized macros shall not be used if a function can be written 
-to accomplish the same behavior. 
-b. If parameterized macros are used for some reason, these rules apply: 
-i. Surround the entire macro body with parentheses. 
-ii. Surround each use of a parameter with parentheses. 
-iii. Use each parameter no more than once, to avoid unintended 
-side effects. 
-iv. Never include a transfer of control (e.g., return keyword). 
-Example: 
-// Don’t do this ... 
-#define MAX(A, B)   ((A) > (B) ? (A) : (B)) 
- 
-// ... when you can do this instead. 
-inline int max(int num1, int num2) 
- 
-Reasoning: There are a lot of risks associated with the use of preprocessor defines, 
-and many of them relate to the creation of parameterized macros.  The extensive use 
-of parentheses (as shown in the example) is important, but does not eliminate the 
-unintended double increment possibility of a call such as MAX(i++, j++).  Other 
-risks of macro misuse include comparison of signed and unsigned data or any test of 
-floating-point data.  Making matters worse, macros are invisible at run-time and 
-thus impossible to step into within the debugger.   
-Where performance is important, note that C99 added C++’s inline keyword. 
-Enforcement: These rules shall be enforced during code reviews.  
+    **Rules:** 
+    1. Parameterized macros shall not be used if a function can be written 
+    to accomplish the same behavior. 
+    
+    2. If parameterized macros are used for some reason, these rules apply: 
+
+        _a._ Surround the entire macro body with parentheses. 
+
+        _b._ Surround each use of a parameter with parentheses. 
+
+        _c._ Use each parameter no more than once, to avoid unintended 
+        side effects. 
+
+        _d._ Never include a transfer of control (e.g., return keyword). 
+
+    **Example:**
+    ```sh
+      // Don’t do this ... 
+      #define MAX(A, B)   ((A) > (B) ? (A) : (B)) 
+      
+      // ... when you can do this instead. 
+      inline int max(int num1, int num2) 
+    ```
+    
+    **Reasoning:** There are a lot of risks associated with the use of preprocessor defines, <br> 
+    and many of them relate to the creation of parameterized macros.  The extensive use <br>
+    of parentheses (as shown in the example) is important, but does not eliminate the <br>
+    unintended double increment possibility of a call such as MAX(i++, j++).  Other <br>
+    risks of macro misuse include comparison of signed and unsigned data or any test of <br>
+    floating-point data.  Making matters worse, macros are invisible at run-time and <br>
+    thus impossible to step into within the debugger.   <br>
+
+    Where performance is important, note that C99 added C++’s inline keyword. <br> 
+    
+    **Enforcement:** These rules shall be enforced during code reviews.  
 
   - ### <a id="threads-of-execution"></a> 6.4 Threads of Execution  
 
-Rules: 
-a. All functions that encapsulate threads of execution (a.k.a., tasks, processes) 
-shall be given names ending with “_thread” (or “_task”, “_process”). 
-Example: 
-void 
-alarm_thread (void * p_data) 
-{ 
-    alarm_t  alarm = ALARM_NONE; 
-    int      err   = OS_NO_ERR; 
- 
-    for (;;) 
-    { 
-        alarm = OSMboxPend(alarm_mbox, &err); 
-        // Process alarm here. 
-    } 
-} 
- 
-Reasoning: Each task in a real-time operating system (RTOS) is like a mini-main(), 
-typically running forever in an infinite loop.  It is valuable to easily identify these 
-important, asynchronous functions during code reviews and debugging sessions. 
-Enforcement: This rule shall be followed during the detailed design phase and 
-enforced during code reviews.  
+    **Rules:** 
+    1. All functions that encapsulate threads of execution (a.k.a., tasks, processes) <br>
+    shall be given names ending with “_thread” (or “_task”, “_process”). <br>
+    
+    **Example:** 
+    ```sh
+      void 
+      alarm_thread (void * p_data) 
+      { 
+          alarm_t  alarm = ALARM_NONE; 
+          int      err   = OS_NO_ERR; 
+      
+          for (;;) 
+          { 
+              alarm = OSMboxPend(alarm_mbox, &err); 
+              // Process alarm here. 
+          } 
+      } 
+    ```
+    
+    **Reasoning:** Each task in a real-time operating system (RTOS) is like a mini-main(), <br>
+    typically running forever in an infinite loop.  It is valuable to easily identify these <br>
+    important, asynchronous functions during code reviews and debugging sessions. <br>
+    
+    **Enforcement:** This rule shall be followed during the detailed design phase and <br>
+    enforced during code reviews.  
 
   - ### <a id="interrupt-service-routines"></a> 6.5 Interrupt Service Routines 
 
-Rules: 
-a. Interrupt service routines (ISRs) are not ordinary functions.  The compiler 
-must be informed that the function is an ISR by way of a #pragma or 
-compiler-specific keyword, such as “__interrupt”. 
-b. All functions that implement ISRs shall be given names ending with “_isr”. 
-c. To ensure that ISRs are not inadvertently called from other parts of the 
-software (they may corrupt the CPU and call stack if this happens), 
-each ISR function shall be declared static and/or be located at the 
-end of the associated driver module as permitted by the target platform. 
-d. A stub or default ISR shall be installed in the vector table at the location of all 
-unexpected or otherwise unhandled interrupt sources.  Each such stub could 
-attempt to disable future interrupts of the same type, say at the interrupt 
-controller, and assert(). 
+    **Rules:** 
+    1. Interrupt service routines (ISRs) are not ordinary functions.  The compiler <br>
+    must be informed that the function is an ISR by way of a #pragma or <br>
+    compiler-specific keyword, such as “__interrupt”. <br>
+    
+    2. All functions that implement ISRs shall be given names ending with “_isr”. 
+    
+    3. To ensure that ISRs are not inadvertently called from other parts of the <br>
+    software (they may corrupt the CPU and call stack if this happens), <br>
+    each ISR function shall be declared static and/or be located at the <br>
+    end of the associated driver module as permitted by the target platform. <br>
+    
+    4. A stub or default ISR shall be installed in the vector table at the location of all <br>
+    unexpected or otherwise unhandled interrupt sources.  Each such stub could <br>
+    attempt to disable future interrupts of the same type, say at the interrupt <br>
+    controller, and assert(). 
 
-Example: 
-#pragma irq_entry 
-void  
-timer_isr (void)  
-{ 
-    uint8_t static  prev = 0x00;                 // prev button states 
-    uint8_t         curr = *gp_button_reg;         // curr button states 
- 
-    // Compare current and previous button states. 
-    g_debounced |= (prev & curr);                  // record all closes 
-    g_debounced &= (prev | curr);                  // record all opens 
- 
-    // Save current pin states for next interrupt 
-    prev = curr;  
- 
-    // Acknowledge timer interrupt at hardware, if necessary. 
-} 
- 
-Reasoning: An ISR is an extension of the hardware.  By definition, it and the 
-straight-line code are asynchronous to each other.  If they share global variables or 
-registers, those singleton objects must be protected via interrupt disables in the 
-straight-line code.  The ISR must not get hung up inside the operating system or 
-waiting for a variable or register to change value.   
-Note that platform-specific ISR installation steps vary and may require ISRs 
-functions to have prototypes and in other ways be visible to at least one other 
-function.   
-Although stub interrupt handlers don’t directly prevent defects, they can 
-certainly make a system more robust in real-world operating conditions. 
-Enforcement: These rules shall be enforced during code reviews. 
+    **Example:**
+    ```sh 
+      #pragma irq_entry 
+      void  
+      timer_isr (void)  
+      { 
+          uint8_t static  prev = 0x00;                 // prev button states 
+          uint8_t         curr = *gp_button_reg;         // curr button states 
+      
+          // Compare current and previous button states. 
+          g_debounced |= (prev & curr);                  // record all closes 
+          g_debounced &= (prev | curr);                  // record all opens 
+      
+          // Save current pin states for next interrupt 
+          prev = curr;  
+      
+          // Acknowledge timer interrupt at hardware, if necessary. 
+      } 
+    ```
+    
+    **Reasoning:** An ISR is an extension of the hardware.  By definition, it and the <br>
+    straight-line code are asynchronous to each other.  If they share global variables or <br> 
+    registers, those singleton objects must be protected via interrupt disables in the <r>
+    straight-line code.  The ISR must not get hung up inside the operating system or <br>
+    waiting for a variable or register to change value.   <br>
+    
+    Note that platform-specific ISR installation steps vary and may require ISRs <br>
+    functions to have prototypes and in other ways be visible to at least one other <br>
+    function.
+
+    Although stub interrupt handlers don’t directly prevent defects, they can <br>
+    certainly make a system more robust in real-world operating conditions. <br>
+    
+    **Enforcement:** These rules shall be enforced during code reviews. 
 
 ## <a id="variable-rules"></a> 7 Variable Rules  
   - ### <a id="naming-conventions"></a> 7.1 Naming Conventions  
 
-Rules: 
-a. No variable shall have a name that is a keyword of C, C++, or any 
-other well-known extension of the C programming language, 
-including specifically K&R C and C99.  Restricted names include 
-interrupt, inline, restrict, class, true, false, public, private, 
-friend, and protected. 
-b. No variable shall have a name that overlaps with a variable name 
-from the C Standard Library (e.g., errno). 
-c. No variable shall have a name that begins with an underscore. 
-d. No variable name shall be longer than 31 characters. 
-e. No variable name shall be shorter than 3 characters, including loop counters. 
-f. No variable name shall contain any uppercase letters. 
-g. No variable name shall contain any numeric value that is called out 
-elsewhere, such as the number of elements in an array or the number of bits 
-in the underlying type. 
-h. Underscores shall be used to separate words in variable names. 
-i. Each variable’s name shall be descriptive of its purpose. 
-j. The names of any global variables shall begin with the letter ‘g’.      
-For example, g_zero_offset. 
-k. The names of any pointer variables shall begin with the letter ‘p’.    
-For example, p_led_reg. 
-l. The names of any pointer-to-pointer variables shall begin with the letters ‘pp’.  
-For example, pp_vector_table. 
-m. The names of all integer variables containing Boolean information 
-(including 0 vs. non-zero) shall begin with the letter ‘b’ and phrased 
-as the question they answer.  For example, b_done_yet or 
-b_is_buffer_full. 
-n. The names of any variables representing non-pointer handles for objects, e.g., 
-file handles, shall begin with the letter ‘h’.  For example, h_input_file. 
-o. In the case of a variable name requiring multiple of the above prefixes, the 
-order of their inclusion before the first underscore shall be [g][p|pp][b|h].
+    **Rules:** 
+    1. No variable shall have a name that is a keyword of C, C++, or any <br>
+    other well-known extension of the C programming language, <br>
+    including specifically K&R C and C99.  Restricted names include <br>
+    interrupt, inline, restrict, class, true, false, public, private, <br>
+    friend, and protected. <br>
+    
+    2. No variable shall have a name that overlaps with a variable name <br>
+    from the C Standard Library (e.g., errno). 
+    
+    3. No variable shall have a name that begins with an underscore. 
+    
+    4. No variable name shall be longer than 31 characters. 
+    
+    5. No variable name shall be shorter than 3 characters, including loop counters. 
+    
+    6. No variable name shall contain any uppercase letters. 
+    
+    7. No variable name shall contain any numeric value that is called out <br>
+    elsewhere, such as the number of elements in an array or the number of bits <br>
+    in the underlying type. 
+    
+    8. Underscores shall be used to separate words in variable names. 
+    
+    9. Each variable’s name shall be descriptive of its purpose. 
+    
+    10. The names of any global variables shall begin with the letter ‘g’. <br>
+    For example, g_zero_offset. 
+    
+    11. The names of any pointer variables shall begin with the letter ‘p’.    
+    For example, p_led_reg. 
+    
+    12. The names of any pointer-to-pointer variables shall begin with the letters ‘pp’.  <br>
+    For example, pp_vector_table. 
+    
+    13. The names of all integer variables containing Boolean information <br>
+    (including 0 vs. non-zero) shall begin with the letter ‘b’ and phrased <Br>
+    as the question they answer.  For example, b_done_yet or 
+    b_is_buffer_full. 
+    
+    14. The names of any variables representing non-pointer handles for objects, e.g., <br>
+    file handles, shall begin with the letter ‘h’.  For example, h_input_file. 
+    
+    15. In the case of a variable name requiring multiple of the above prefixes, the <Br>
+    order of their inclusion before the first underscore shall be [g][p|pp][b|h]. <br>
 
-Example: See Appendix D. 
-Reasoning: The base rules are adopted to maximize code portability across 
-compilers.  Many C compilers recognize differences only in the first 31 characters in 
-a variable’s name and reserve names beginning with an underscore for internal 
-names.   
-The other rules are meant to highlight risks and ensure consistent proper use of 
-variables.  For example, all code relating to the use of global variables and other 
-singleton objects, including peripheral registers, needs to be carefully considered to 
-ensure there can be no race conditions or data corruptions via asynchronous writes. 
-Enforcement: These rules shall be enforced during code reviews.  
+    **Example:** See Appendix D. 
+    
+    **Reasoning:** The base rules are adopted to maximize code portability across <br>
+    compilers.  Many C compilers recognize differences only in the first 31 characters in <br>
+    a variable’s name and reserve names beginning with an underscore for internal <br>
+    names.   
+    
+    The other rules are meant to highlight risks and ensure consistent proper use of <br>
+    variables.  For example, all code relating to the use of global variables and other <br> 
+    singleton objects, including peripheral registers, needs to be carefully considered to <br> 
+    ensure there can be no race conditions or data corruptions via asynchronous writes. <br>
+    Enforcement: These rules shall be enforced during code reviews.  
 
   - ### <a id="initialization"></a> 7.2 Initialization  
 
-Rules: 
-a. All variables shall be initialized before use. 
-b. It is preferable to define local variables as you need them, rather than all at 
-the top of a function. 
-c. If project- or file-global variables are used, their definitions shall be grouped 
-together and placed at the top of a source code file. 
-d. Any pointer variable lacking an initial address shall be initialized to NULL. 
-Example: 
-uint32_t  g_array[NUM_ROWS][NUM_COLS] = { ... }; 
-... 
- 
-    for (int col = 0; col < NUM_COLS; col++) 
-    { 
-        g_array[row][col] = ...; 
-    } 
- 
-Reasoning: Too many programmers assume the C run-time will watch out for them, 
-e.g., by zeroing the value of uninitialized variables on system startup.  This is a bad 
-assumption, which can prove dangerous in a mission-critical system.  For readability 
-reasons it is better to declare local variables as close as possible to their first use, 10 
-which C99 makes possible by incorporating that earlier feature of C++. 
-Enforcement: An automated tool shall scan all of the source code prior to each build, 
-to warn about variables used prior to initialization; static analysis tools can do this.  
-The remainder of these rules shall be enforced during code reviews. 
+    **Rules:** 
+    
+    1. All variables shall be initialized before use. 
+    
+    2. It is preferable to define local variables as you need them, rather than all at <br>
+    the top of a function. 
+    
+    3. If project- or file-global variables are used, their definitions shall be grouped <br>
+    together and placed at the top of a source code file. <br>
+    
+    4. Any pointer variable lacking an initial address shall be initialized to NULL. 
+    
+    **Example:** 
+    ```sh
+      uint32_t  g_array[NUM_ROWS][NUM_COLS] = { ... }; 
+      ... 
+      
+          for (int col = 0; col < NUM_COLS; col++) 
+          { 
+              g_array[row][col] = ...; 
+          } 
+    ```
+
+    **Reasoning:** Too many programmers assume the C run-time will watch out for them, <br>
+    e.g., by zeroing the value of uninitialized variables on system startup.  This is a bad <br> 
+    assumption, which can prove dangerous in a mission-critical system.  For readability <br>
+    reasons it is better to declare local variables as close as possible to their first use, 10 <br> 
+    which C99 makes possible by incorporating that earlier feature of C++. <br>
+    
+    Enforcement: An automated tool shall scan all of the source code prior to each build, 
+    to warn about variables used prior to initialization; static analysis tools can do this.  
+    The remainder of these rules shall be enforced during code reviews. 
 
 ## <a id="statement-rules"></a> 8 Statement Rules  
   - ### <a id=""></a> 8.1 Variable Declarations  
 
-Rules: 
-a. The comma operator (,) shall not be used within variable 
-declarations. 
-Example: 
-char * x, y;   // Was y intended to be a pointer also?  Don’t do this. 
- 
-Reasoning: The cost of placing each declaration on a line of its own is low.  By 
-contrast, the risk that either the compiler or a maintainer will misunderstand your 
-intentions is high. 
-Enforcement: This rule shall be enforced during code reviews.  
+    **Rules:** 
+    1. The comma operator (,) shall not be used within variable 
+    declarations. 
+    
+    **Example:** 
+    char * x, y;   // Was y intended to be a pointer also?  Don’t do this. 
+    
+    **Reasoning:** The cost of placing each declaration on a line of its own is low.  By <br>
+    contrast, the risk that either the compiler or a maintainer will misunderstand your <br>
+    intentions is high. 
+    
+    **Enforcement:** This rule shall be enforced during code reviews.  
 
   - ### <a id="conditional-statements"></a> 8.2 Conditional Statements  
 
-Rules: 
-a. It is a preferred practice that the shortest (measured in lines of code) of the if 
-and else if clauses should be placed first. 
-b. Nested if...else statements shall not be deeper than two levels.  Use function 
-calls or switch statements to reduce complexity and aid understanding. 
-c. Assignments shall not be made within an if or else if test. 
-d. Any if statement with an else if clause shall end with an else clause.11 
-Example: 
-if (NULL == p_object) 
-{ 
-    result = ERR_NULL_PTR; 
-} 
-else if (p_object = malloc(sizeof(object_t))) // No assignments! 
-{ 
-    ... 
-} 
-else 
-{ 
-    // Normal processing steps, which require many lines of code. 
-    ... 
-} 
- 
-Reasoning: Long clauses can distract the human eye from the decision-path logic.  
-By putting the shorter clause earlier, the decision path becomes easier to follow.  
-(And easier to follow is always good for reducing bugs.)  Deeply nested if...else 
-statements are a sure sign of a complex and fragile state machine implementation; 
-there is always a safer and more readable way to do the same thing. 
-Enforcement: These rules shall be enforced during code reviews.
+    **Rules:** 
+    1. It is a preferred practice that the shortest (measured in lines of code) of the if <br>
+    and else if clauses should be placed first. 
+
+    2. Nested if...else statements shall not be deeper than two levels.  Use function <br>
+    calls or switch statements to reduce complexity and aid understanding. <br>
+    
+    3. Assignments shall not be made within an if or else if test. 
+    
+    4. Any if statement with an else if clause shall end with an else clause.11 
+    
+    **Example:** 
+    ```sh
+      if (NULL == p_object) 
+      { 
+          result = ERR_NULL_PTR; 
+      } 
+      else if (p_object = malloc(sizeof(object_t))) // No assignments! 
+      { 
+          ... 
+      } 
+      else 
+      { 
+          // Normal processing steps, which require many lines of code. 
+          ... 
+      } 
+    ```
+    
+    **Reasoning:** Long clauses can distract the human eye from the decision-path logic. <br> 
+    By putting the shorter clause earlier, the decision path becomes easier to follow.  <br>
+    (And easier to follow is always good for reducing bugs.)  Deeply nested if...else <br>
+    statements are a sure sign of a complex and fragile state machine implementation; <br>
+    there is always a safer and more readable way to do the same thing. <br>
+    
+    **Enforcement:** These rules shall be enforced during code reviews.
 
   - ### <a id="switch-statements"></a> 8.3 Switch Statements  
 
-Rules: 
-a. The break for each case shall be indented to align with the 
-associated case, rather than with the contents of the case code block. 
-b. All switch statements shall contain a default block. 
-c. Any case designed to fall through to the next shall be commented to clearly 
-explain the absence of the corresponding break. 
-Example: 
-switch (err) 
-{ 
-  case ERR_A: 
-    ... 
-  break; 
- 
-  case ERR_B: 
-    ... 
-  // Also perform the steps for ERR_C. 
-  case ERR_C: 
-    ... 
-  break; 
- 
-  default: 
-    ... 
-  break; 
-} 
- 
-Reasoning: C’s switch statements are powerful constructs, but prone to errors such 
-as omitted break statements and unhandled cases.  By aligning the case labels with 
-their break statements it is easier to spot a missing break. 
-Enforcement: These rules shall be enforced during code reviews.  
+    **Rules:** 
+    
+    1. The break for each case shall be indented to align with the <br>
+    associated case, rather than with the contents of the case code block. <br> 
+    
+    2. All switch statements shall contain a default block. 
+    
+    3. Any case designed to fall through to the next shall be commented to clearly <br>
+    explain the absence of the corresponding break. 
+    
+    **Example:**
+    ```sh 
+      switch (err) 
+      { 
+        case ERR_A: 
+          ... 
+        break; 
+      
+        case ERR_B: 
+          ... 
+        // Also perform the steps for ERR_C. 
+        case ERR_C: 
+          ... 
+        break; 
+      
+        default: 
+          ... 
+        break; 
+      } 
+    ```
+    
+    **Reasoning:** C’s switch statements are powerful constructs, but prone to errors such <br>
+    as omitted break statements and unhandled cases.  By aligning the case labels with <br>
+    their break statements it is easier to spot a missing break. <br>
+    
+    **Enforcement:** These rules shall be enforced during code reviews.  
 
   - ### <a id="loops"></a> 8.4 Loops  
 
-Rules: 
-a. Magic numbers shall not be used as the initial value or in the endpoint test of 
-a while, do...while, or for loop.12 
-b. With the exception of the initialization of a loop counter in the first clause of a 
-for statement and the change to the same variable in the third, no assignment 
-shall be made in any loop’s controlling expression. 
-c. Infinite loops shall be implemented via controlling expression for (;;).13 
-d. Each loop with an empty body shall feature a set of braces enclosing a 
-comment to explain why nothing needs to be done until after the loop 
-terminates. 
-Example: 
-// Why would anyone bury a magic number (e.g., “100”) in their code? 
-for (int row = 0; row < 100; row++)     
-{ 
-    // Descriptively-named constants prevent defects and aid readability. 
-    for (int col = 0; col < NUM_COLS; col++)   
-    { 
-        ... 
-    } 
- 
-Reasoning: It is always important to synchronize the number of loop iterations to 
-the size of the underlying data structure.  Doing this via a descriptively-named 
-constant prevents defects that result when changes in one part of the code, such as 
-the dimension of an array, are not matched in other areas of the code. 
-Enforcement: These rules shall be enforced during code reviews. 
+    Rules: 
+    1. Magic numbers shall not be used as the initial value or in the endpoint test of <br>
+    a while, do...while, or for loop.12 
+    
+    2. With the exception of the initialization of a loop counter in the first clause of a <br>
+    for statement and the change to the same variable in the third, no assignment <br>
+    shall be made in any loop’s controlling expression. 
+    
+    3. Infinite loops shall be implemented via controlling expression for (;;).13 <br>
+    
+    4. Each loop with an empty body shall feature a set of braces enclosing a <br>
+    comment to explain why nothing needs to be done until after the loop <br>
+    terminates. 
+
+    **Example:** 
+    ```sh
+      // Why would anyone bury a magic number (e.g., “100”) in their code? 
+      for (int row = 0; row < 100; row++)     
+      { 
+          // Descriptively-named constants prevent defects and aid readability. 
+          for (int col = 0; col < NUM_COLS; col++)   
+          { 
+              ... 
+          } 
+    ```
+    **Reasoning:** It is always important to synchronize the number of loop iterations to <br>
+    the size of the underlying data structure.  Doing this via a descriptively-named <br>
+    constant prevents defects that result when changes in one part of the code, such as <br> 
+    the dimension of an array, are not matched in other areas of the code. <br>
+    
+    **Enforcement:** These rules shall be enforced during code reviews. 
 
   - ### <a id="jumps"></a> 8.5 Jumps  
 
-Rules: 
-a. The use of goto statements shall be restricted as per Rule 1.7.c. 
-b. C Standard Library functions abort(), exit(), setjmp(), and longjmp() 
-shall not be used. 
-Reasoning: Algorithms that utilize jumps to move the instruction pointer can and 
-should be rewritten in a manner that is more readable and thus easier to maintain. 
-Enforcement: These rules shall be enforced by an automated scan of all modified or 
-new modules for inappropriate use of forbidden tokens.  To the extent that the use of 
-goto is permitted, code reviewers should investigate alternative code structures to 
-improve code maintainability and readability.  
+    **Rules:** 
+    1. The use of goto statements shall be restricted as per Rule 1.7.c. 
+    
+    2. C Standard Library functions abort(), exit(), setjmp(), and longjmp() 
+    shall not be used. 
+    
+    **Reasoning:** Algorithms that utilize jumps to move the instruction pointer can and <br>
+    should be rewritten in a manner that is more readable and thus easier to maintain. <br>
+    Enforcement: These rules shall be enforced by an automated scan of all modified or <br>
+    new modules for inappropriate use of forbidden tokens.  To the extent that the use of <br> 
+    goto is permitted, code reviewers should investigate alternative code structures to <br>
+    improve code maintainability and readability.  <br>
 
   - ### <a id="equivalence-tests"></a> 8.6 Equivalence Tests  
 
-Rules: 
-a. When evaluating the equality of a variable against a constant, the 
-constant shall always be placed to the left of the equal-to operator 
-(==). 
-Example: 
-if (NULL == p_object) 
-{ 
-    return (ERR_NULL_PTR); 
-} 
- 
-Reasoning: It is always desirable to detect possible typos and as many other coding 
-defects as possible at compile-time.  Defect discovery in later phases is not 
-guaranteed and often also more costly.  By following this rule, any compiler will 
-reliably detect erroneous attempts to assign (i.e., = instead of ==) a new value to a 
-constant. 
-Enforcement: Many compilers can be configured to warn about suspicious 
-assignments (i.e., located where comparisons are more typical).  However, ultimate 
-responsibility for enforcement of this rule falls to code reviewers. 
+    **Rules:** 
+    
+    1. When evaluating the equality of a variable against a constant, the <br>
+    constant shall always be placed to the left of the equal-to operator <br>
+    (==). 
+    
+    **Example:** 
+    if (NULL == p_object) 
+    { 
+        return (ERR_NULL_PTR); 
+    } 
+    
+    **Reasoning:** It is always desirable to detect possible typos and as many other coding <br>
+    defects as possible at compile-time.  Defect discovery in later phases is not <br>
+    guaranteed and often also more costly.  By following this rule, any compiler will <br> 
+    reliably detect erroneous attempts to assign (i.e., = instead of ==) a new value to a <br> 
+    constant. 
+    
+    **Enforcement:** Many compilers can be configured to warn about suspicious <br>
+    assignments (i.e., located where comparisons are more typical).  However, ultimate <br> 
+    responsibility for enforcement of this rule falls to code reviewers. <br>
 
 ## <a id="table-of-abbreviations"></a> Appendix A: Table of Abbreviations 
 
-Abbreviation Meaning 
-adc analog-to-digital converter 
-avg average 
-b_ Boolean 
-buf buffer 
-cfg configuration 
-curr current (item in a list) 
-dac digital-to-analog converter 
-ee EEPROM 
-err error 
-g_ global  
-gpio general-purpose I/O pins 
-h_ handle (to) 
-init initialize 
-io input/output 
-isr interrupt service routine 
-lcd liquid crystal display 
-led light-emitting diode 
-max maximum 
-mbox mailbox 
-mgr manager 
-min minimum 
-msec millisecond14 
-msg message 
-next next (item in a list) 
-nsec nanosecond 
-num number (of) 
-p_ pointer (to) 
-pp_ pointer to a pointer (to) 
-prev previous (item in a list) 
-prio priority 
-pwm pulse width modulation 
-q queue 
-reg register 
-rx receive 
-sem semaphore 
-str string (null terminated) 
-sync synchronize 
-temp temperature 
-tmp temporary 
-tx transmit 
-usec microsecond
+    |   Abbreviation  |   Meaning                             |
+    | --------------- | --------------------------------------|  
+    |   adc           |   analog-to-digital converter         |
+    |   avg           |   average                             |
+    |   b_            |   Boolean                             |
+    |   buf           |   buffer                              |
+    |   cfg           |   configuration                       |
+    |   curr          |   current (item in a list)            |
+    |   dac           |   digital-to-analog converter         |
+    |   ee            |   EEPROM                              |
+    |   err           |   error                               |
+    |   g_            |   global                              |
+    |   gpio          |   general-purpose I/O pins            |
+    |   h_            |   handle (to)                         |
+    |   init          |   initialize                          |
+    |   io            |   input/output                        |
+    |   isr           |   interrupt service routine           |   
+    |   lcd           |   liquid crystal display              |
+    |   led           |   light-emitting diode                |
+    |   max           |   maximum                             |
+    |   mbox          |   mailbox                             |
+    |   mgr           |   manager                             |
+    |   min           |   minimum                             |
+    |   msec          |   millisecond14                       |
+    |   msg           |   message                             |
+    |   next          |   next (item in a list)               |
+    |   nsec          |   nanosecond                          |
+    |   num           |   number (of)                         |
+    |   p_            |   pointer (to)                        |
+    |   pp_           |   pointer to a pointer (to)           |
+    |   prev          |   previous (item in a list)           |
+    |   prio          |   priority                            |
+    |   pwm           |   pulse width modulation              |
+    |   q             |   queue                               |
+    |   reg           |   register                            |
+    |   rx            |   receive                             |
+    |   sem           |   semaphore                           |
+    |   str           |   string (null terminated)            |
+    |   sync          |   synchronize                         |            
+    |   temp          |   temperature                         |
+    |   tmp           |   temporary                           |
+    |   tx            |   transmit                            |
+    |   usec          |   microsecond                         |
+
 
 ## <a id="header-file-template"></a> Appendix B: Header File Template  
 
-/** @file module.h 
- *  
- * @brief A description of the module’s purpose. 
- * 
- * @par        
- * COPYRIGHT NOTICE: (c) 2018 Barr Group.  All rights reserved. 
- */  
- 
-#ifndef MODULE_H 
-#define MODULE_H 
- 
-int8_t max8(int8_t num1, int8_t num2); 
- 
-#endif /* MODULE_H */ 
- 
-/*** end of file ***/
+```sh
+  /** @file module.h 
+  *  
+  * @brief A description of the module’s purpose. 
+  * 
+  * @par        
+  * COPYRIGHT NOTICE: (c) 2018 Barr Group.  All rights reserved. 
+  */  
 
+  #ifndef MODULE_H 
+  #define MODULE_H 
+
+  int8_t max8(int8_t num1, int8_t num2); 
+
+  #endif /* MODULE_H */ 
+
+  /*** end of file ***/
+```
 ## <a id="source-file-template"></a> Appendix C: Source File Template  
 
-/** @file module.c 
- *  
- * @brief A description of the module’s purpose.  
- * 
- * @par        
- * COPYRIGHT NOTICE: (c) 2018 Barr Group.  All rights reserved. 
- */ 
- 
-#include <stdint.h> 
-#include <stdbool.h> 
- 
-#include “module.h” 
- 
-/*! 
- * @brief Identify the larger of two 8-bit integers. 
- *  
- * @param[in] num1  The first number to be compared. 
- * @param[in] num2  The second number to be compared. 
- * 
- * @return The value of the larger number. 
- */ 
-int8_t  
-max8 (int8_t num1, int8_t num2) 
-{ 
-    return ((num1 > num2) ? num1 : num2); 
-} 
- 
-/*** end of file ***/
+```sh
+  /** @file module.c 
+  *  
+  * @brief A description of the module’s purpose.  
+  * 
+  * @par        
+  * COPYRIGHT NOTICE: (c) 2018 Barr Group.  All rights reserved. 
+  */ 
+  
+  #include <stdint.h> 
+  #include <stdbool.h> 
+  
+  #include “module.h” 
+  
+  /*! 
+  * @brief Identify the larger of two 8-bit integers. 
+  *  
+  * @param[in] num1  The first number to be compared. 
+  * @param[in] num2  The second number to be compared. 
+  * 
+  * @return The value of the larger number. 
+  */ 
+  int8_t  
+  max8 (int8_t num1, int8_t num2) 
+  { 
+      return ((num1 > num2) ? num1 : num2); 
+  } 
+  
+  /*** end of file ***/
+```
 
 ## <a id="example-program"></a> Appendix D: Example Program  
 
-/** @file crc.h 
- *  
- * @brief Compact CRC library for embedded systems for CRC-CCITT, CRC-16, CRC-32. 
- * 
- * @par        
- * COPYRIGHT NOTICE: (c) 2000, 2018 Michael Barr.  This software is placed in the  
- * public domain and may be used for any purpose.  However, this notice must not 
- * be changed or removed.  No warranty is expressed or implied by the publication 
- * or distribution of this source code. 
- */  
- 
-#ifndef CRC_H 
-#define CRC_H 
- 
- 
-// Compile-time selection of the desired CRC algorithm. 
-// 
-#if defined(CRC_CCITT) 
- 
-#define CRC_NAME    "CRC-CCITT" 
-typedef uint16_t    crc_t; 
- 
-#elif defined(CRC_16) 
- 
-#define CRC_NAME    "CRC-16" 
-typedef uint16_t    crc_t; 
- 
-#elif defined(CRC_32) 
- 
-#define CRC_NAME    "CRC-32" 
-typedef uint32_t    crc_t; 
- 
-#else 
- 
-#error "One of CRC_CCITT, CRC_16, or CRC_32 must be #define'd." 
- 
-#endif 
- 
- 
-Embedded C Coding Standard 
- 62 
-// Public API functions provided by the Compact CRC library. 
-// 
-void    crc_init(void); 
-crc_t   crc_slow(uint8_t const * const p_message, int n_bytes); 
-crc_t   crc_fast(uint8_t const * const p_message, int n_bytes); 
- 
- 
-#endif /* CRC_H */ 
- 
-/*** end of file ***/ 
- 
-/** @file crc.c 
- *  
- * @brief Compact CRC generator for embedded systems, with brute force and table- 
- * driven algorithm options.  Supports CRC-CCITT, CRC-16, and CRC-32 standards. 
- * 
- * @par        
- * COPYRIGHT NOTICE: (c) 2000, 2018 Michael Barr.  This software is placed in the  
- * public domain and may be used for any purpose.  However, this notice must not 
- * be changed or removed.  No warranty is expressed or implied by the publication 
- * or distribution of this source code. 
- */  
+```sh
+  /** @file crc.h 
+  *  
+  * @brief Compact CRC library for embedded systems for CRC-CCITT, CRC-16, CRC-32. 
+  * 
+  * @par        
+  * COPYRIGHT NOTICE: (c) 2000, 2018 Michael Barr.  This software is placed in the  
+  * public domain and may be used for any purpose.  However, this notice must not 
+  * be changed or removed.  No warranty is expressed or implied by the publication 
+  * or distribution of this source code. 
+  */  
   
-#include <stdint.h> 
- 
-#include "crc.h" 
- 
- 
-// Algorithmic parameters based on CRC elections made in crc.h. 
-// 
-#define BITS_PER_BYTE      8 
-#define WIDTH              (BITS_PER_BYTE * sizeof(crc_t)) 
-#define TOPBIT             (1 << (WIDTH - 1)) 
- 
-// Allocate storage for the byte-wide CRC lookup table. 
-// 
-#define CRC_TABLE_SIZE     256 
-static crc_t  g_crc_table[CRC_TABLE_SIZE]; 
- 
-// Further algorithmic configuration to support the selected CRC standard. 
-// 
-#if defined(CRC_CCITT) 
- 
-#define POLYNOMIAL              ((crc_t) 0x1021) 
-#define INITIAL_REMAINDER       ((crc_t) 0xFFFF) 
-#define FINAL_XOR_VALUE         ((crc_t) 0x0000) 
-#define REFLECT_DATA(X)         (X) 
-#define REFLECT_REMAINDER(X)    (X) 
- 
-#elif defined(CRC_16) 
- 
-#define POLYNOMIAL              ((crc_t) 0x8005) 
-#define INITIAL_REMAINDER       ((crc_t) 0x0000) 
-#define FINAL_XOR_VALUE         ((crc_t) 0x0000) 
-#define REFLECT_DATA(X)         ((uint8_t) reflect((X), BITS_PER_BYTE)) 
-#define REFLECT_REMAINDER(X)    ((crc_t) reflect((X), WIDTH)) 
- 
-#elif defined(CRC_32) 
- 
-#define POLYNOMIAL              ((crc_t) 0x04C11DB7) 
-#define INITIAL_REMAINDER       ((crc_t) 0xFFFFFFFF) 
-#define FINAL_XOR_VALUE         ((crc_t) 0xFFFFFFFF) 
-#define REFLECT_DATA(X)         ((uint8_t) reflect((X), BITS_PER_BYTE)) 
-#define REFLECT_REMAINDER(X)    ((crc_t) reflect((X), WIDTH)) 
- 
-#endif 
- 
-/*! 
- * @brief Compute the reflection of a set of data bits around its center. 
- * @param[in] data  The data bits to be reflected. 
- * @param[in] num2  The number of bits.  
- * @return The reflected data. 
- */ 
-static uint32_t 
-reflect (uint32_t data, uint8_t n_bits) 
-{ 
-    uint32_t  reflection = 0x00000000; 
- 
-     
-    // NOTE: For efficiency sake, n_bits is not verified to be <= 32. 
- 
-    // Reflect the data about the center bit. 
-    // 
-    for (uint8_t bit = 0; bit < n_bits; ++bit) 
-    { 
-        // If the LSB bit is set, set the reflection of it. 
-        // 
-        if (data & 0x01) 
-        { 
-            reflection |= (1 << ((n_bits - 1) - bit)); 
-        } 
- 
-        data = (data >> 1); 
-    } 
- 
-    return (reflection); 
- 
-}   /* reflect() */ 
- 
+  #ifndef CRC_H 
+  #define CRC_H 
   
-/*! 
- * @brief Initialize the lookup table for byte-by-byte CRC acceleration. 
- * 
- * @par  
- * This function must be run before crc_fast() or the table stored in ROM. 
- */ 
-void 
-crc_init (void) 
-{ 
-    // Compute the remainder of each possible dividend. 
-    // 
-    for (crc_t dividend = 0; dividend < CRC_TABLE_SIZE; ++dividend) 
-    { 
-        // Start with the dividend followed by zeros. 
-        // 
-        crc_t remainder = dividend << (WIDTH - BITS_PER_BYTE); 
- 
-        // Perform modulo-2 division, a bit at a time. 
-        // 
-        for (int bit = BITS_PER_BYTE; bit > 0; --bit) 
-        { 
-            // Try to divide the current data bit. 
-            // 
-            if (remainder & TOPBIT) 
-            { 
-                remainder = (remainder << 1) ^ POLYNOMIAL; 
-            } 
-            else 
-            { 
-                remainder = (remainder << 1); 
-            } 
-        } 
- 
-        // Store the result into the table. 
-        // 
-        g_crc_table[dividend] = remainder; 
-    } 
- 
-}   /* crc_init() */  
+  
+  // Compile-time selection of the desired CRC algorithm. 
+  // 
+  #if defined(CRC_CCITT) 
+  
+  #define CRC_NAME    "CRC-CCITT" 
+  typedef uint16_t    crc_t; 
+  
+  #elif defined(CRC_16) 
+  
+  #define CRC_NAME    "CRC-16" 
+  typedef uint16_t    crc_t; 
+  
+  #elif defined(CRC_32) 
+  
+  #define CRC_NAME    "CRC-32" 
+  typedef uint32_t    crc_t; 
+  
+  #else 
+  
+  #error "One of CRC_CCITT, CRC_16, or CRC_32 must be #define'd." 
+  
+  #endif 
+  
+  
+  Embedded C Coding Standard 
+  62 
+  // Public API functions provided by the Compact CRC library. 
+  // 
+  void    crc_init(void); 
+  crc_t   crc_slow(uint8_t const * const p_message, int n_bytes); 
+  crc_t   crc_fast(uint8_t const * const p_message, int n_bytes); 
+  
+  
+  #endif /* CRC_H */ 
+  
+  /*** end of file ***/ 
+  
+  /** @file crc.c 
+  *  
+  * @brief Compact CRC generator for embedded systems, with brute force and table- 
+  * driven algorithm options.  Supports CRC-CCITT, CRC-16, and CRC-32 standards. 
+  * 
+  * @par        
+  * COPYRIGHT NOTICE: (c) 2000, 2018 Michael Barr.  This software is placed in the  
+  * public domain and may be used for any purpose.  However, this notice must not 
+  * be changed or removed.  No warranty is expressed or implied by the publication 
+  * or distribution of this source code. 
+  */  
+    
+  #include <stdint.h> 
+  
+  #include "crc.h" 
+  
+  
+  // Algorithmic parameters based on CRC elections made in crc.h. 
+  // 
+  #define BITS_PER_BYTE      8 
+  #define WIDTH              (BITS_PER_BYTE * sizeof(crc_t)) 
+  #define TOPBIT             (1 << (WIDTH - 1)) 
+  
+  // Allocate storage for the byte-wide CRC lookup table. 
+  // 
+  #define CRC_TABLE_SIZE     256 
+  static crc_t  g_crc_table[CRC_TABLE_SIZE]; 
+  
+  // Further algorithmic configuration to support the selected CRC standard. 
+  // 
+  #if defined(CRC_CCITT) 
+  
+  #define POLYNOMIAL              ((crc_t) 0x1021) 
+  #define INITIAL_REMAINDER       ((crc_t) 0xFFFF) 
+  #define FINAL_XOR_VALUE         ((crc_t) 0x0000) 
+  #define REFLECT_DATA(X)         (X) 
+  #define REFLECT_REMAINDER(X)    (X) 
+  
+  #elif defined(CRC_16) 
+  
+  #define POLYNOMIAL              ((crc_t) 0x8005) 
+  #define INITIAL_REMAINDER       ((crc_t) 0x0000) 
+  #define FINAL_XOR_VALUE         ((crc_t) 0x0000) 
+  #define REFLECT_DATA(X)         ((uint8_t) reflect((X), BITS_PER_BYTE)) 
+  #define REFLECT_REMAINDER(X)    ((crc_t) reflect((X), WIDTH)) 
+  
+  #elif defined(CRC_32) 
+  
+  #define POLYNOMIAL              ((crc_t) 0x04C11DB7) 
+  #define INITIAL_REMAINDER       ((crc_t) 0xFFFFFFFF) 
+  #define FINAL_XOR_VALUE         ((crc_t) 0xFFFFFFFF) 
+  #define REFLECT_DATA(X)         ((uint8_t) reflect((X), BITS_PER_BYTE)) 
+  #define REFLECT_REMAINDER(X)    ((crc_t) reflect((X), WIDTH)) 
+  
+  #endif 
+  
+  /*! 
+  * @brief Compute the reflection of a set of data bits around its center. 
+  * @param[in] data  The data bits to be reflected. 
+  * @param[in] num2  The number of bits.  
+  * @return The reflected data. 
+  */ 
+  static uint32_t 
+  reflect (uint32_t data, uint8_t n_bits) 
+  { 
+      uint32_t  reflection = 0x00000000; 
+  
+      
+      // NOTE: For efficiency sake, n_bits is not verified to be <= 32. 
+  
+      // Reflect the data about the center bit. 
+      // 
+      for (uint8_t bit = 0; bit < n_bits; ++bit) 
+      { 
+          // If the LSB bit is set, set the reflection of it. 
+          // 
+          if (data & 0x01) 
+          { 
+              reflection |= (1 << ((n_bits - 1) - bit)); 
+          } 
+  
+          data = (data >> 1); 
+      } 
+  
+      return (reflection); 
+  
+  }   /* reflect() */ 
+  
+    
+  /*! 
+  * @brief Initialize the lookup table for byte-by-byte CRC acceleration. 
+  * 
+  * @par  
+  * This function must be run before crc_fast() or the table stored in ROM. 
+  */ 
+  void 
+  crc_init (void) 
+  { 
+      // Compute the remainder of each possible dividend. 
+      // 
+      for (crc_t dividend = 0; dividend < CRC_TABLE_SIZE; ++dividend) 
+      { 
+          // Start with the dividend followed by zeros. 
+          // 
+          crc_t remainder = dividend << (WIDTH - BITS_PER_BYTE); 
+  
+          // Perform modulo-2 division, a bit at a time. 
+          // 
+          for (int bit = BITS_PER_BYTE; bit > 0; --bit) 
+          { 
+              // Try to divide the current data bit. 
+              // 
+              if (remainder & TOPBIT) 
+              { 
+                  remainder = (remainder << 1) ^ POLYNOMIAL; 
+              } 
+              else 
+              { 
+                  remainder = (remainder << 1); 
+              } 
+          } 
+  
+          // Store the result into the table. 
+          // 
+          g_crc_table[dividend] = remainder; 
+      } 
+  
+  }   /* crc_init() */  
 
-/*! 
- * @brief Compute the CRC of an array of bytes, bit-by-bit. 
- * @param[in] p_message  A pointer to the array of data bytes to be CRC'd. 
- * @param[in] n_bytes    The number of bytes in the array of data. 
- * @return The CRC of the array of data. 
- */ 
-crc_t 
-crc_slow (uint8_t const * const p_message, int n_bytes) 
-{ 
-    crc_t    remainder = INITIAL_REMAINDER; 
- 
-    // Perform modulo-2 division, one byte at a time. 
-    // 
-    for (int byte = 0; byte < n_bytes; ++byte) 
-    { 
-        // Bring the next byte into the remainder. 
-        // 
-        remainder ^= (REFLECT_DATA(p_message[byte]) << (WIDTH - BITS_PER_BYTE)); 
- 
-        // Perform modulo-2 division, one bit at a time. 
-        // 
-        for (int bit = BITS_PER_BYTE; bit > 0; --bit) 
-        { 
-            // Try to divide the current data bit. 
-            // 
-            if (remainder & TOPBIT) 
-            { 
-                remainder = (remainder << 1) ^ POLYNOMIAL; 
-            } 
-            else 
-            { 
-                remainder = (remainder << 1); 
-            } 
-        } 
-    } 
- 
-    // The final remainder is the CRC result. 
-    // 
-    return (REFLECT_REMAINDER(remainder) ^ FINAL_XOR_VALUE); 
- 
-}   /* crc_slow() */ 
+  /*! 
+  * @brief Compute the CRC of an array of bytes, bit-by-bit. 
+  * @param[in] p_message  A pointer to the array of data bytes to be CRC'd. 
+  * @param[in] n_bytes    The number of bytes in the array of data. 
+  * @return The CRC of the array of data. 
+  */ 
+  crc_t 
+  crc_slow (uint8_t const * const p_message, int n_bytes) 
+  { 
+      crc_t    remainder = INITIAL_REMAINDER; 
+  
+      // Perform modulo-2 division, one byte at a time. 
+      // 
+      for (int byte = 0; byte < n_bytes; ++byte) 
+      { 
+          // Bring the next byte into the remainder. 
+          // 
+          remainder ^= (REFLECT_DATA(p_message[byte]) << (WIDTH - BITS_PER_BYTE)); 
+  
+          // Perform modulo-2 division, one bit at a time. 
+          // 
+          for (int bit = BITS_PER_BYTE; bit > 0; --bit) 
+          { 
+              // Try to divide the current data bit. 
+              // 
+              if (remainder & TOPBIT) 
+              { 
+                  remainder = (remainder << 1) ^ POLYNOMIAL; 
+              } 
+              else 
+              { 
+                  remainder = (remainder << 1); 
+              } 
+          } 
+      } 
+  
+      // The final remainder is the CRC result. 
+      // 
+      return (REFLECT_REMAINDER(remainder) ^ FINAL_XOR_VALUE); 
+  
+  }   /* crc_slow() */ 
 
-/*! 
- * @brief Compute the CRC of an array of bytes, byte-by-byte. 
- * @param[in] p_message  A pointer to the array of data bytes to be CRC'd. 
- * @param[in] n_bytes    The number of bytes in the array of data. 
- * @return The CRC of the array of data. 
- */ 
-crc_t 
-crc_fast (uint8_t const * const p_message, int n_bytes) 
-{ 
-    crc_t remainder = INITIAL_REMAINDER; 
- 
-    // Divide the message by the polynomial, a byte at a time. 
-    // 
-    for (int byte = 0; byte < n_bytes; ++byte) 
-    { 
-        uint8_t data = REFLECT_DATA(p_message[byte]) ^ 
-                           (remainder >> (WIDTH - BITS_PER_BYTE)); 
-        remainder = g_crc_table[data] ^ (remainder << BITS_PER_BYTE); 
-    } 
- 
-    // The final remainder is the CRC. 
-    // 
-    return (REFLECT_REMAINDER(remainder) ^ FINAL_XOR_VALUE); 
-}   /* crc_fast() */ 
- 
-/*** end of file ***/
+  /*! 
+  * @brief Compute the CRC of an array of bytes, byte-by-byte. 
+  * @param[in] p_message  A pointer to the array of data bytes to be CRC'd. 
+  * @param[in] n_bytes    The number of bytes in the array of data. 
+  * @return The CRC of the array of data. 
+  */ 
+  crc_t 
+  crc_fast (uint8_t const * const p_message, int n_bytes) 
+  { 
+      crc_t remainder = INITIAL_REMAINDER; 
+  
+      // Divide the message by the polynomial, a byte at a time. 
+      // 
+      for (int byte = 0; byte < n_bytes; ++byte) 
+      { 
+          uint8_t data = REFLECT_DATA(p_message[byte]) ^ 
+                            (remainder >> (WIDTH - BITS_PER_BYTE)); 
+          remainder = g_crc_table[data] ^ (remainder << BITS_PER_BYTE); 
+      } 
+  
+      // The final remainder is the CRC. 
+      // 
+      return (REFLECT_REMAINDER(remainder) ^ FINAL_XOR_VALUE); 
+  }   /* crc_fast() */ 
+  
+  /*** end of file ***/
+```
 
 ## <a id="bibliography"></a> Bibliography
 
-[Barr] Barr, Michael.  “Programming Embedded Systems in C and C++.”  
+1. [Barr] Barr, Michael.  “Programming Embedded Systems in C and C++.”  
 O’Reilly, 1999. 
-[C90] “ISO/IEC9899:1990, Programming Languages – C,” ISO, 1990. 
-[C99] “ISO/IEC9899:1999, Programming Languages – C,” ISO, 1999. 
-[CERT-C] Seacord, Robert C.  “The CERT C Coding Standard, Second Edition.”  
+
+2. [C90] “ISO/IEC9899:1990, Programming Languages – C,” ISO, 1990. 
+
+3. [C99] “ISO/IEC9899:1999, Programming Languages – C,” ISO, 1999. 
+
+4. [CERT-C] Seacord, Robert C.  “The CERT C Coding Standard, Second Edition.”  
 Pearson, 2014. 
-[Harbison] Harbison III, Samuel P. and Guy L. Steele, Jr.  “C: A Reference Manual, 
+5. [Harbison] Harbison III, Samuel P. and Guy L. Steele, Jr.  “C: A Reference Manual,<br> 
 Fifth Edition.”  Prentice Hall, 2002. 
-[Hatton] Hatton, Les.  “Safer C: Developing Software for High-Integrity and Safety-
+
+6. [Hatton] Hatton, Les.  “Safer C: Developing Software for High-Integrity and Safety- <br>
 Critical Systems.”  McGraw-Hill, 1994. 
-[Holub] Holub, Allen I.  “Enough Rope to Shoot Yourself in the Foot: Rules for C 
+
+7. [Holub] Holub, Allen I.  “Enough Rope to Shoot Yourself in the Foot: Rules for C <br>
 and C++ Programming.”  McGraw-Hill, 1995. 
-[IEC61508] “Functional Safety of Electrical/Electronic/Programmable Electronic 
+
+8. [IEC61508] “Functional Safety of Electrical/Electronic/Programmable Electronic <br>
 Safety-Related Systems,” International Electromechanical Commission, 
 1998-2000. 
-[Koenig] Koenig, Andrew.  “C Traps and Pitfalls.”  Addison-Wesley, 1988. 
-[Loudon] Loudon, Kyle.  “C++ Pocket Reference.”  O’Reilly, 2003. 
-[MISRA-C] “MISRA C:2012 Guidelines for the use of the C language in critical 
+
+9. [Koenig] Koenig, Andrew.  “C Traps and Pitfalls.”  Addison-Wesley, 1988. 
+
+10. [Loudon] Loudon, Kyle.  “C++ Pocket Reference.”  O’Reilly, 2003. 
+
+11. [MISRA-C] “MISRA C:2012 Guidelines for the use of the C language in critical 
 systems,” MIRA, March 2013. 
-[MISRA-C++] “MISRA C++ Guidelines for the use of the C++ language in critical 
+
+12. [MISRA-C++] “MISRA C++ Guidelines for the use of the C++ language in critical 
 systems,” MIRA, June 2008. 
-[Prinz] Prinz, Peter and Ulla Kirch-Prinz.  “C Pocket Reference.”  O’Reilly, 2003. 
-[Sutter] Sutter, Herb and Andrei Alexandrescu.  “C++ Coding Standards: 101 
+
+13. [Prinz] Prinz, Peter and Ulla Kirch-Prinz.  “C Pocket Reference.”  O’Reilly, 2003. 
+
+14. [Sutter] Sutter, Herb and Andrei Alexandrescu.  “C++ Coding Standards: 101 <br>
 Rules, Guidelines, and Best Practices.”  Pearson, 2005. 
-[Uwano] Uwano, H., Nakamura, M., Monden, A., and Matsumoto, K.  “Analyzing 
-Individual Performance of Source Code Review Using Reviewer’s Eye 
-Movement,” Proceedings of the 2006 Symposium on Eye Tracking Research & 
+
+15. [Uwano] Uwano, H., Nakamura, M., Monden, A., and Matsumoto, K.  “Analyzing <br>
+Individual Performance of Source Code Review Using Reviewer’s Eye <br>
+Movement,” Proceedings of the 2006 Symposium on Eye Tracking Research & <br>
 Applications, San Diego, March 27-29, 2006. 
 
 ## <a id="index" ></a> Index
@@ -1725,14 +1858,6 @@ SYMBOLS
 <= less-or-equal operator  21 
 =, +=, -=, *=, /=, %=, &=, |=, ^=, ~=, and!=  
 assignment operators   21 
- 
- 
- 
- 
- 
- 
- 
- 
  
 == equal-to operator  21 
 ->  component-selection operator  21 
