@@ -137,33 +137,33 @@ below is an example to get the size of various type on a machine using different
 limits.h header file −
 
 Example
-	```sh
-		#include <stdio.h>
-		#include <stdlib.h>
-		#include <limits.h>
-		#include <float.h>
-		
-		int main(int argc, char** argv) {
-		
-			printf("CHAR_BIT    :   %d\n", CHAR_BIT);
-			printf("CHAR_MAX    :   %d\n", CHAR_MAX);
-			printf("CHAR_MIN    :   %d\n", CHAR_MIN);
-			printf("INT_MAX     :   %d\n", INT_MAX);
-			printf("INT_MIN     :   %d\n", INT_MIN);
-			printf("LONG_MAX    :   %ld\n", (long) LONG_MAX);
-			printf("LONG_MIN    :   %ld\n", (long) LONG_MIN);
-			printf("SCHAR_MAX   :   %d\n", SCHAR_MAX);
-			printf("SCHAR_MIN   :   %d\n", SCHAR_MIN);
-			printf("SHRT_MAX    :   %d\n", SHRT_MAX);
-			printf("SHRT_MIN    :   %d\n", SHRT_MIN);
-			printf("UCHAR_MAX   :   %d\n", UCHAR_MAX);
-			printf("UINT_MAX    :   %u\n", (unsigned int) UINT_MAX);
-			printf("ULONG_MAX   :   %lu\n", (unsigned long) ULONG_MAX);
-			printf("USHRT_MAX   :   %d\n", (unsigned short) USHRT_MAX);	
-			return 0;
+```sh
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <limits.h>
+	#include <float.h>
+	
+	int main(int argc, char** argv) {
+	
+		printf("CHAR_BIT    :   %d\n", CHAR_BIT);
+		printf("CHAR_MAX    :   %d\n", CHAR_MAX);
+		printf("CHAR_MIN    :   %d\n", CHAR_MIN);
+		printf("INT_MAX     :   %d\n", INT_MAX);
+		printf("INT_MIN     :   %d\n", INT_MIN);
+		printf("LONG_MAX    :   %ld\n", (long) LONG_MAX);
+		printf("LONG_MIN    :   %ld\n", (long) LONG_MIN);
+		printf("SCHAR_MAX   :   %d\n", SCHAR_MAX);
+		printf("SCHAR_MIN   :   %d\n", SCHAR_MIN);
+		printf("SHRT_MAX    :   %d\n", SHRT_MAX);
+		printf("SHRT_MIN    :   %d\n", SHRT_MIN);
+		printf("UCHAR_MAX   :   %d\n", UCHAR_MAX);
+		printf("UINT_MAX    :   %u\n", (unsigned int) UINT_MAX);
+		printf("ULONG_MAX   :   %lu\n", (unsigned long) ULONG_MAX);
+		printf("USHRT_MAX   :   %d\n", (unsigned short) USHRT_MAX);	
+		return 0;
 
-		}
-	```
+	}
+```
 ### **Floating-Point Types**
 The following table provide the details of standard floating-point types with storage sizes and value 
 
@@ -182,27 +182,27 @@ binary representation of real numbers in your programs. The following example pr
 
 taken by a float type and its range values −
 
-	````sh
-    #include <stdio.h>
-    #include <stdlib.h>
-    #include <limits.h>
-    #include <float.h>
-    
-    int main(int argc, char** argv) {
-    
-			printf("Storage size for float : %d \n", sizeof(float));
-			printf("FLT_MAX     :   %g\n", (float) FLT_MAX);
-			printf("FLT_MIN     :   %g\n", (float) FLT_MIN);
-			printf("-FLT_MAX    :   %g\n", (float) -FLT_MAX);
-			printf("-FLT_MIN    :   %g\n", (float) -FLT_MIN);
-			printf("DBL_MAX     :   %g\n", (double) DBL_MAX);
-			printf("DBL_MIN     :   %g\n", (double) DBL_MIN);
-			printf("-DBL_MAX     :  %g\n", (double) -DBL_MAX);
-			printf("Precision value: %d\n", FLT_DIG );
+```sh
+	#include <stdio.h>
+	#include <stdlib.h>
+	#include <limits.h>
+	#include <float.h>
 	
-			return 0;
-    }
-	````
+	int main(int argc, char** argv) {
+	
+		printf("Storage size for float : %d \n", sizeof(float));
+		printf("FLT_MAX     :   %g\n", (float) FLT_MAX);
+		printf("FLT_MIN     :   %g\n", (float) FLT_MIN);
+		printf("-FLT_MAX    :   %g\n", (float) -FLT_MAX);
+		printf("-FLT_MIN    :   %g\n", (float) -FLT_MIN);
+		printf("DBL_MAX     :   %g\n", (double) DBL_MAX);
+		printf("DBL_MIN     :   %g\n", (double) DBL_MIN);
+		printf("-DBL_MAX     :  %g\n", (double) -DBL_MAX);
+		printf("Precision value: %d\n", FLT_DIG );
+
+		return 0;
+	}
+```
 ### **The void Type**
 The void type specifies that no value is available. It is used in three kinds of situations −
 
@@ -255,7 +255,7 @@ A variable definition tells the compiler where and how much storage to create fo
 Here, type must be a valid C data type including char, w_char, int, float, double, bool, or any user-defined object; and variable_list <br> may consist of one or more identifier names separated by commas. Some valid declarations are shown here −
 
 ```sh
-  int    i, j, k;
+	int    i, j, k;
 	char   c, ch;
 	float  f, salary;
 	double d;
@@ -271,7 +271,7 @@ Variables can be initialized (assigned an initial value) in their declaration. T
 
 Some examples are −
 ```sh
-  extern int d = 3, f = 5;    // declaration of d and f. 
+	extern int d = 3, f = 5;    // declaration of d and f. 
 	int d = 3, f = 5;           // definition and initializing d and f. 
 	byte z = 22;                // definition and initializes z. 
 	char x = 'x';               // the variable x has the value 'x'.
@@ -400,7 +400,7 @@ There are certain characters in C that represent special meaning when preceded b
 
 Following is the example to show a few escape sequence characters −
 ```sh
-  #include <stdio.h>
+	#include <stdio.h>
 
 	int main() {
 		printf("Hello\tWorld\n\n");
@@ -418,7 +418,7 @@ There are two simple ways in C to define constants −
 ### **The #define Preprocessor**
 Example
 ```sh
-  #include <stdio.h>
+	#include <stdio.h>
 
 	#define LENGTH 10   
 	#define WIDTH  5
@@ -438,7 +438,7 @@ Example
 ### **The const Keyword**
 Example
 ```sh
-  #include <stdio.h>
+	#include <stdio.h>
 
 	int main() {
 		const int  LENGTH = 10;
@@ -484,7 +484,7 @@ The static modifier may also be applied to global variables. When this is done, 
 
 In C programming, when static is used on a global variable, it causes only one copy of that member to be shared by all the <br> objects of its class.
 ```sh
-  #include <stdio.h>
+	#include <stdio.h>
  
 	/* function declaration */
 	void func(void);
@@ -1128,7 +1128,7 @@ Pointers in C are easy and fun to learn. Some C programming tasks are performed 
 
 As you know, every variable is a memory location and every memory location has its address defined which can be accessed using ampersand <br>(&) operator, which denotes an address in memory. Consider the following example, which prints the address of the variables defined −
 ```sh
-  #include <stdio.h>
+	#include <stdio.h>
 
 	int main () {
 	
@@ -1266,7 +1266,7 @@ C supports a wide range of functions that manipulate null-terminated strings −
 
 The following example uses some of the above-mentioned functions −
 ```sh
-  #include <stdio.h>
+	#include <stdio.h>
 	#include <string.h>
 	
 	int main () {
@@ -1987,7 +1987,7 @@ All preprocessor commands begin with a hash symbol (#). It must be the first non
 ### **Peprocessors Examples**
 Analyze the following examples to understand various directives.
 ```sh
-  #define MAX_ARRAY_LENGTH 20
+	#define MAX_ARRAY_LENGTH 20
 ```
 
 This directive tells the CPP to replace instances of MAX_ARRAY_LENGTH with 20. Use #define for constants to increase readability.
