@@ -838,15 +838,15 @@ Example
 	/* function returning the max between two numbers */
 	int max(int num1, int num2) {
 	
-			/* local variable declaration */
-			int result;
-		
-			if (num1 > num2)
-				result = num1;
-			else
-				result = num2;
-		
-			return result; 
+		/* local variable declaration */
+		int result;
+	
+		if (num1 > num2)
+			result = num1;
+		else
+			result = num2;
+	
+		return result; 
 	}
 ```
 ### **Function Declarations**
@@ -880,31 +880,31 @@ To call a function, you simply need to pass the required parameters along with t
 		
 	int main () {
 	
-			/* local variable definition */
-			int a = 100;
-			int b = 200;
-			int ret;
-		
-			/* calling a function to get max value */
-			ret = max(a, b);
-		
-			printf( "Max value is : %d\n", ret );
-		
-			return 0;
+		/* local variable definition */
+		int a = 100;
+		int b = 200;
+		int ret;
+	
+		/* calling a function to get max value */
+		ret = max(a, b);
+	
+		printf( "Max value is : %d\n", ret );
+	
+		return 0;
 	}
 		
 	/* function returning the max between two numbers */
 	int max(int num1, int num2) {
 	
-			/* local variable declaration */
-			int result;
-		
-			if (num1 > num2)
-				result = num1;
-			else
-				result = num2;
-		
-			return result; 
+		/* local variable declaration */
+		int result;
+	
+		if (num1 > num2)
+			result = num1;
+		else
+			result = num2;
+	
+		return result; 
 	}
 ```
 
@@ -1022,10 +1022,10 @@ Formal parameters, are treated as local variables with-in a function and they ta
 	/* function to add two integers */
 	int sum(int a, int b) {
 	
-			printf ("value of a in sum() = %d\n",  a);
-			printf ("value of b in sum() = %d\n",  b);
-	
-			return a + b;
+		printf ("value of a in sum() = %d\n",  a);
+		printf ("value of b in sum() = %d\n",  b);
+
+		return a + b;
 	}
 ```
 ### **Initializing Local and Global Variables**
@@ -1187,11 +1187,11 @@ The NULL pointer is a constant with a value of zero defined in several standard 
 
 	int main () {
 	
-			int  *ptr = NULL;
+		int  *ptr = NULL;
+
+		printf("The value of ptr is : %x\n", ptr  );
 	
-			printf("The value of ptr is : %x\n", ptr  );
-		
-			return 0;
+		return 0;
 	}
 ```
 In most of the operating systems, programs are not permitted to access memory at address 0 because that memory is reserved by the <br> operating system. However, the memory address 0 has special significance; it signals that the pointer is not intended to point to an <br> accessible memory location. But by convention, if a pointer contains the null (zero) value, it is assumed to point to nothing.
@@ -1242,9 +1242,9 @@ Actually, you do not place the null character at the end of a string constant. T
 
 	int main () {
 	
-			char greeting[6] = {'H', 'e', 'l', 'l', 'o', '\0'};
-			printf("Greeting message: %s\n", greeting );
-			return 0;
+		char greeting[6] = {'H', 'e', 'l', 'l', 'o', '\0'};
+		printf("Greeting message: %s\n", greeting );
+		return 0;
 	}
 ```
 C supports a wide range of functions that manipulate null-terminated strings −
@@ -1328,10 +1328,10 @@ To access any member of a structure, we use the member access operator (.). The 
 	#include <string.h>
 		
 	struct Books {
-			char  title[50];
-			char  author[50];
-			char  subject[100];
-			int   book_id;
+		char  title[50];
+		char  author[50];
+		char  subject[100];
+		int   book_id;
 	};
 		
 	int main( ) {
@@ -1373,10 +1373,10 @@ You can pass a structure as a function argument in the same way as you pass any 
 	#include <string.h>
 		
 	struct Books {
-			char  title[50];
-			char  author[50];
-			char  subject[100];
-			int   book_id;
+		char  title[50];
+		char  author[50];
+		char  subject[100];
+		int   book_id;
 	};
 	
 	/* function declaration */
@@ -1681,17 +1681,17 @@ The above structure definition instructs the C compiler that the age variable is
 	
 	int main( ) {
 	
-			Age.age = 4;
-			printf( "Sizeof( Age ) : %d\n", sizeof(Age) );
-			printf( "Age.age : %d\n", Age.age );
-	
-			Age.age = 7;
-			printf( "Age.age : %d\n", Age.age );
-	
-			Age.age = 8;
-			printf( "Age.age : %d\n", Age.age );
-	
-			return 0;
+		Age.age = 4;
+		printf( "Sizeof( Age ) : %d\n", sizeof(Age) );
+		printf( "Age.age : %d\n", Age.age );
+
+		Age.age = 7;
+		printf( "Age.age : %d\n", Age.age );
+
+		Age.age = 8;
+		printf( "Age.age : %d\n", Age.age );
+
+		return 0;
 	}
 ```
 ## <a id="typedef"></a> C - Typedef
@@ -1782,15 +1782,15 @@ The **int putchar(int c)** function puts the passed character on the screen and 
 	#include <stdio.h>
 	int main( ) {
 	
-			int c;
-	
-			printf( "Enter a value :");
-			c = getchar( );
-	
-			printf( "\nYou entered: ");
-			putchar( c );
-	
-			return 0;
+		int c;
+
+		printf( "Enter a value :");
+		c = getchar( );
+
+		printf( "\nYou entered: ");
+		putchar( c );
+
+		return 0;
 	}
 ```
 When the above code is compiled and executed, it waits for you to input some text. When you enter a text and press enter, then the <br> program proceeds and reads only a single character and displays it as follows −
@@ -1826,15 +1826,15 @@ The **format** can be a simple constant string, but you can specify %s, %d, %c, 
 	#include <stdio.h>
 	int main( ) {
 	
-			char str[100];
-			int i;
-	
-			printf( "Enter a value :");
-			scanf("%s %d", str, &i);
-	
-			printf( "\nYou entered: %s %d ", str, i);
-	
-			return 0;
+		char str[100];
+		int i;
+
+		printf( "Enter a value :");
+		scanf("%s %d", str, &i);
+
+		printf( "\nYou entered: %s %d ", str, i);
+
+		return 0;
 	}
 ```
 ## <a id="file-io"></a> C - File I/O
@@ -2079,9 +2079,9 @@ The token-pasting operator (##) within a macro definition combines two arguments
 	#define tokenpaster(n) printf ("token" #n " = %d", token##n)
 	
 	int main(void) {
-			int token34 = 40;
-			tokenpaster(34);
-			return 0;
+		int token34 = 40;
+		tokenpaster(34);
+		return 0;
 	}
 ```
 It happened so because this example results in the following actual output from the preprocessor −
@@ -2109,7 +2109,7 @@ The preprocessor **defined** operator is used in constant expressions to determi
 One of the powerful functions of the CPP is the ability to simulate functions using parameterized macros. For example, we might have <br> some code to square a number as follows −
 ```sh
 	int square(int x) {
-			return x * x;
+		return x * x;
 	}
 ```
 We can rewrite above the code using a macro as follows −
@@ -2161,7 +2161,7 @@ and a main program called program.c that uses the header file, like this −
 	#include "header.h"
 	
 	int main (void) {
-			puts (test ());
+		puts (test ());
 	}
 ```
 the compiler will see the same token stream as it would if program.c read.
@@ -2170,14 +2170,14 @@ the compiler will see the same token stream as it would if program.c read.
 	char *test (void);
 	
 	int main (void) {
-			puts (test ());
+		puts (test ());
 	}
 ```
 
 ### **Once-Only Headers**
 If a header file happens to be included twice, the compiler will process its contents twice and it will result in an error. The standard <br>way to prevent this is to enclose the entire real contents of the file in a conditional, like this −
 ```sh
-  #ifndef HEADER_FILE
+	#ifndef HEADER_FILE
 	#define HEADER_FILE
 	
 	the entire header file file
