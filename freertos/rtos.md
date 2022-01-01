@@ -120,13 +120,13 @@ If the task was created successfully then pdPASS is returned. Otherwise errCOULD
 **task.h**
 ```sh
 	TaskHandle_t xTaskCreateStatic( 
-        TaskFunction_t pxTaskCode,
-        const char * const pcName,
-        const uint32_t ulStackDepth,
-        void * const pvParameters,
-        UBaseType_t uxPriority,
-        StackType_t * const puxStackBuffer,
-        StaticTask_t * const pxTaskBuffer 
+			TaskFunction_t pxTaskCode,
+			const char * const pcName,
+			const uint32_t ulStackDepth,
+			void * const pvParameters,
+			UBaseType_t uxPriority,
+			StackType_t * const puxStackBuffer,
+			StaticTask_t * const pxTaskBuffer 
 	);
 ```
 Create a new [task](https://www.freertos.org/a00015.html) and add it to the list of tasks that are ready to run. <br> [configSUPPORT_STATIC_ALLOCATION](https://www.freertos.org/a00110.html#configSUPPORT_STATIC_ALLOCATION) must be set to 1 in FreeRTOSConfig.h for this RTOS API 
@@ -229,20 +229,22 @@ xTaskCreateRestrictedStatic() is intended for use with [FreeRTOS-MPU](https://ww
 **Returns:**
 pdPASS if the task was successfully created and added to a ready list, otherwise an error code <br> defined in the file projdefs.h
 <br> Tasks that include MPU support require even more parameters to create than those that <br> don't. Passing each parameter to xTaskCreateRestrictedStatic() individually would be unwieldy <br> so instead the structure TaskParameters_t is used to allow the parameters to be configured <br> statically at compile time. The structure is defined in task.h as:
+
 ```sh
   typedef struct xTASK_PARAMETERS
-{
-	TaskFunction_t pvTaskCode;
-	const signed char * const pcName;
-	unsigned short usStackDepth;
-	void *pvParameters;
-	UBaseType_t uxPriority;
-	portSTACK_TYPE *puxStackBuffer;
-	MemoryRegion_t xRegions[ portNUM_CONFIGURABLE_REGIONS ];
-	#if ( ( portUSING_MPU_WRAPPERS == 1 ) && ( configSUPPORT_STATIC_ALLOCATION == 1 ) )
-			StaticTask_t * const pxTaskBuffer;
-	#endif
+	{
+		TaskFunction_t pvTaskCode;
+		const signed char * const pcName;
+		unsigned short usStackDepth;
+		void *pvParameters;
+		UBaseType_t uxPriority;
+		portSTACK_TYPE *puxStackBuffer;
+		MemoryRegion_t xRegions[ portNUM_CONFIGURABLE_REGIONS ];
+		#if ( ( portUSING_MPU_WRAPPERS == 1 ) && ( configSUPPORT_STATIC_ALLOCATION == 1 ) )
+				StaticTask_t * const pxTaskBuffer;
+		#endif
 	} TaskParameters_t;
+
 	....where MemoryRegion_t is defined as:
 	typedef struct xMEMORY_REGION
 	{
@@ -395,8 +397,9 @@ vTaskDelay() specifies a time at which the task wishes to unblock **relative to*
 ### <a id="vTaskDelayUntil"></a> vTaskDelayUntil
 **task. h**
 ```sh
-	void vTaskDelayUntil( TickType_t *pxPreviousWakeTime,
-												const TickType_t xTimeIncrement );
+	void vTaskDelayUntil( 
+			TickType_t *pxPreviousWakeTime,
+			const TickType_t xTimeIncrement );
 ```
 INCLUDE_vTaskDelayUntil must be defined as 1 for this function to be available. See the [RTOS Configuration](https://www.freertos.org/a00110.html) <br> documentation for more information.
 
