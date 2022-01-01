@@ -39,12 +39,13 @@ Type by which tasks are referenced. For example, a call to xTaskCreate returns (
 ### <a id="xtaskCreate"></a> xTaskCreate()
 **task. h** <br>
 ```sh
-	BaseType_t xTaskCreate( TaskFunction_t pvTaskCode,
-													const char * const pcName,
-													configSTACK_DEPTH_TYPE usStackDepth,
-													void *pvParameters,
-													UBaseType_t uxPriority,
-													TaskHandle_t *pxCreatedTask
+	BaseType_t xTaskCreate( 
+			TaskFunction_t pvTaskCode,
+			const char * const pcName,
+			configSTACK_DEPTH_TYPE usStackDepth,
+			void *pvParameters,
+			UBaseType_t uxPriority,
+			TaskHandle_t *pxCreatedTask
 	);
 ```
 Create a new [task](https://www.freertos.org/a00015.html) and add it to the list of tasks that are ready to run. [configSUPPORT_DYNAMIC_ALLOCATION](https://www.freertos.org/a00110.html#configSUPPORT_DYNAMIC_ALLOCATION) must be set to 1 in FreeRTOSConfig.h, or left undefined (in which case it will default to 1), for this RTOS API function to be available.
@@ -96,17 +97,17 @@ If the task was created successfully then pdPASS is returned. Otherwise errCOULD
 	/* Function that creates a task. */
 	void vOtherFunction( void )
 	{
-	BaseType_t xReturned;
-	TaskHandle_t xHandle = NULL;
+		BaseType_t xReturned;
+		TaskHandle_t xHandle = NULL;
 	
 		/* Create the task, storing the handle. */
 		xReturned = xTaskCreate(
-										vTaskCode,       /* Function that implements the task. */
-										"NAME",          /* Text name for the task. */
-										STACK_SIZE,      /* Stack size in words, not bytes. */
-										( void * ) 1,    /* Parameter passed into the task. */
-										tskIDLE_PRIORITY,/* Priority at which the task is created. */
-										&xHandle );      /* Used to pass out the created task's handle. */
+			vTaskCode,       /* Function that implements the task. */
+			"NAME",          /* Text name for the task. */
+			STACK_SIZE,      /* Stack size in words, not bytes. */
+			( void * ) 1,    /* Parameter passed into the task. */
+			tskIDLE_PRIORITY,/* Priority at which the task is created. */
+			&xHandle );      /* Used to pass out the created task's handle. */
 
 		if( xReturned == pdPASS )
 		{
@@ -118,13 +119,15 @@ If the task was created successfully then pdPASS is returned. Otherwise errCOULD
 ### xTaskCreateStatic()
 **task.h**
 ```sh
-	TaskHandle_t xTaskCreateStatic( TaskFunction_t pxTaskCode,
-    															const char * const pcName,
-    															const uint32_t ulStackDepth,
-    															void * const pvParameters,
-    															UBaseType_t uxPriority,
-    															StackType_t * const puxStackBuffer,
-    															StaticTask_t * const pxTaskBuffer );
+	TaskHandle_t xTaskCreateStatic( 
+        TaskFunction_t pxTaskCode,
+        const char * const pcName,
+        const uint32_t ulStackDepth,
+        void * const pvParameters,
+        UBaseType_t uxPriority,
+        StackType_t * const puxStackBuffer,
+        StaticTask_t * const pxTaskBuffer 
+	);
 ```
 Create a new [task](https://www.freertos.org/a00015.html) and add it to the list of tasks that are ready to run. <br> [configSUPPORT_STATIC_ALLOCATION](https://www.freertos.org/a00110.html#configSUPPORT_STATIC_ALLOCATION) must be set to 1 in FreeRTOSConfig.h for this RTOS API 
 <br> function to be available
@@ -192,13 +195,13 @@ If neither puxStackBuffer or pxTaskBuffer are NULL then the task will be created
 
 		/* Create the task without using any dynamic memory allocation. */
 		xHandle = xTaskCreateStatic(
-									vTaskCode,       /* Function that implements the task. */
-									"NAME",          /* Text name for the task. */
-									STACK_SIZE,      /* Number of indexes in the xStack array. */
-									( void * ) 1,    /* Parameter passed into the task. */
-									tskIDLE_PRIORITY,/* Priority at which the task is created. */
-									xStack,          /* Array to use as the task's stack. */
-									&xTaskBuffer );  /* Variable to hold the task's data structure. */
+			vTaskCode,       /* Function that implements the task. */
+			"NAME",          /* Text name for the task. */
+			STACK_SIZE,      /* Number of indexes in the xStack array. */
+			( void * ) 1,    /* Parameter passed into the task. */
+			tskIDLE_PRIORITY,/* Priority at which the task is created. */
+			xStack,          /* Array to use as the task's stack. */
+			&xTaskBuffer );  /* Variable to hold the task's data structure. */
 
 		/* puxStackBuffer and pxTaskBuffer were not NULL, so the task will have
 		been created, and xHandle will be the task's handle.  Use the handle
