@@ -22,6 +22,8 @@ extern "C" {
 #include <string.h>
 #include <stddef.h>
 #include <stdarg.h>
+#include <limits.h>
+#include <float.h>
 #include <math.h>
 
 /* Define ----------------------------------------------------------------------------------------*/

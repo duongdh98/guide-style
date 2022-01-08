@@ -1,0 +1,3 @@
+# After change file giignore please delate cache use git command 
+# git rm -rf --cached .
+*.exe
