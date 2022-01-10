@@ -51,8 +51,14 @@ extern "C" {
 		} while (0);
 
 #if defined (DBG)
-		/* Enable or disable printing (error and debug) messages in each module */
+		/* Enable or disable printing debug) messages in each module */
 		#define GD_APP					DBG_ON
+		#define GD_DATA_TYPE		DBG_OFF
+		#define GD_LOOP					DBG_OFF
+		#define GD_FUNCTIONS		DBG_OFF
+		#define GD_SCOPE				DBG_OFF
+		#define GD_ARRAY				DBG_OFF
+		#define GD_POINTER		  DBG_ON
 
 #endif
 

@@ -30,7 +30,10 @@ void start()
 
 #if OPEN
 
-		DGB_LOG(GD_APP, __FUNCTION__, (": Hello world ! ... \n \n"));
+		DGB_LOG(GD_APP, __FUNCTION__, (": Begin app! ... \n \n"));
+		printf("**************************************************************** \n \n");
+		printf("Define GD_* == DBG_ON to open module, DBG_OFF to close module .. \n \n");
+		printf("**************************************************************** \n");
 
 #endif
 		return;
