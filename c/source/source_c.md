@@ -2680,6 +2680,8 @@ You pass all the command line arguments separated by a space, but if argument it
   int c = a ^ b;        // 00000011(3)
 ```
 
+**Shift left <<**
+
 ```sh
   A 0000 1100
   <—
@@ -2687,12 +2689,12 @@ You pass all the command line arguments separated by a space, but if argument it
   B = 0011 0000
 ```
 
-**Shift left <<**
-
 ```sh
 	unsigned char a = 5;      // 00000101(5)
 	unsigned char b = a << 4; // 01010000(80)
 ```
+
+**Shift right >>**
 
 ```sh
   A 0000 1100
@@ -2700,8 +2702,6 @@ You pass all the command line arguments separated by a space, but if argument it
   B = A >> 2    
   B = 0000 0011
 ```
-
-**Shift right >>**
 
 ```sh
 	unsigned char a = 5;      // 00000101(5)
