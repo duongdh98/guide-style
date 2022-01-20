@@ -2671,6 +2671,7 @@ You pass all the command line arguments separated by a space, but if argument it
 | 0	| 1	|   1   |
 | 1	| 0	|   1   |
 | 1	| 1	|   0   |
+
 **XOR**
 
 ```sh
@@ -2685,6 +2686,7 @@ You pass all the command line arguments separated by a space, but if argument it
   B = A << 2    
   B = 0011 0000
 ```
+
 **Shift left <<**
 
 ```sh
@@ -2698,6 +2700,7 @@ You pass all the command line arguments separated by a space, but if argument it
   B = A >> 2    
   B = 0000 0011
 ```
+
 **Shift right >>**
 
 ```sh
