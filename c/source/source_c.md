@@ -33,6 +33,9 @@
 ## C - [Useful Resources](#useful-resources)
 ## C - [Discussion](#discussion)
 
+#_C Somthing fun_
+## C - [Bit](#bit)
+
 /* -------------------------------------------------------------------- */
 
 # _C Programming Tutorial_
@@ -2614,3 +2617,90 @@ You pass all the command line arguments separated by a space, but if argument it
 ## <a id="quick-uide"></a> C - Quick Guide
 ## <a id="useful-resources"></a> C - Useful Resources
 ## <a id="discussion"></a> C - Discussion
+
+#_C Somthing fun_
+## <a id="bit"></a> C - Bit
+
+
+| A	| B	| A & B |
+| - | - | ----- |
+| 0	| 0	|   0   |
+| 0	| 1	|   0   |
+| 1	| 0	|   0   |
+| 1	| 1	|   1   |
+
+**AND**
+
+```sh
+  unsigned char a = 5;           // 00000101(5)
+  unsigned char b = 6;           // 00000110(6)
+  unsigned char c = a & b;       // 00000100(4)
+```
+
+
+| A	| B	| A / B |
+| - | - | ----- |
+| 0	| 0	|   0   |
+| 0	| 1	|   1   |
+| 1	| 0	|   1   |
+| 1	| 1	|   1   |
+
+**OR**
+
+```sh
+	unsigned char a = 5;           // 00000101(5)
+	unsigned char b = 6;           // 00000110(6)
+	unsigned char c = a | b;       // 00000111(7)
+```
+
+
+| A |	~A |
+| - | -- |
+| 0	|  1 |
+| 1	|  0 |
+
+**NOT**
+
+```sh
+  unsigned char a = 5;  // 00000101(5)
+  unsigned char b = ~a; // 11111010(250)
+```
+| A	| B	| A ^ B |
+| - | - | ----- |
+| 0	| 0	|   0   |
+| 0	| 1	|   1   |
+| 1	| 0	|   1   |
+| 1	| 1	|   0   |
+**XOR**
+
+```sh
+  unsigned char a = 5;  // 00000101(5)
+  unsigned char b = 6;  // 00000110(6)
+  int c = a ^ b;        // 00000011(3)
+```
+
+```sh
+  A 0000 1100
+  <—
+  B = A << 2    
+  B = 0011 0000
+```
+**Shift left <<**
+
+```sh
+	unsigned char a = 5;      // 00000101(5)
+	unsigned char b = a << 4; // 01010000(80)
+```
+
+```sh
+  A 0000 1100
+  —>
+  B = A >> 2    
+  B = 0000 0011
+```
+**Shift right >>**
+
+```sh
+	unsigned char a = 5;      // 00000101(5)
+	unsigned char b = a >> 1; // 00000010(2)
+```
