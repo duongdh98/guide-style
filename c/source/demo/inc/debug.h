@@ -57,8 +57,8 @@ extern "C" {
 		#define GD_LOOP					DBG_OFF
 		#define GD_FUNCTIONS		DBG_OFF
 		#define GD_SCOPE				DBG_OFF
-		#define GD_ARRAY				DBG_OFF
-		#define GD_POINTER		  DBG_ON
+		#define GD_ARRAY				DBG_ON
+		#define GD_POINTER		  DBG_OFF
 
 #endif
 

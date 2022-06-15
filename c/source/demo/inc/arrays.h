@@ -28,6 +28,8 @@ void return_array_form_a_function();
 
 void poiter_return_array();
 
+void func_check_array();
+
 #ifdef __cplusplus
 }
 #endif // DEBUG

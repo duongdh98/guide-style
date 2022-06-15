@@ -42,10 +42,11 @@ int main(int argc, char * argv[])
 		call_a_function();
 
 		/* Array */
-		mutil_dimensional();
- 		passing_array_to_function();
- 		return_array_form_a_function();
- 		poiter_return_array();
+		// mutil_dimensional();
+ 		// passing_array_to_function();
+ 		// return_array_form_a_function();
+ 		// poiter_return_array();
+		func_check_array();
 
 		/* pointers */
 		pointer_arithmetic();

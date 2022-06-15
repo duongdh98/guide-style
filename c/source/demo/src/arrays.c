@@ -141,10 +141,69 @@ void poiter_return_array()
 		
 		for ( i = 0; i < 5; i++ ) {
 				printf("*(balance + %d) : %f\n",  i, *(balance + i) );
-		}
+		} 
 		
 #endif
 		return;
 }
+
+/* Recursive */
+int factorial(int num)
+{
+		if(num == 0)
+		{
+				return 0;
+		}
+		else if(num == 1)
+		{
+				return 1;
+		}  
+		else {
+				printf("Num: %d \n",num);  
+				return num * factorial(num - 1);
+		}
+}
+
+void func_check_array()
+{
+#if OPEN
+		// char arr[3][10];
+
+		// for(int j = 0; j < 3; j++)
+		// {
+		// 		strcpy(arr[j], "Duong");
+		// }
+
+		// for(int i = 0; i < 3; i++)
+		// {
+		// 		printf("String = %s, \t adress = %u \n", arr + i, arr + i);
+		// }
+		
+		// char *sport[] = {
+		// 		"golf",
+		// 		"hockey",
+		// 		"football",
+		// 		"cricket",
+		// 		"shooting"
+		// };
+
+		// for (int j = 0; j < 5; j++)
+		// {
+		// 		sport[j] = "Duong";
+		// }
+		
+		// for(int i = 0; i < 5; i++)
+		// {
+		// 		printf("String = %s, \t adress = %u \n", sport[i], sport[i]);
+		// }
+
+		int num=5,fact;
+
+		fact = factorial(num);  
+		printf("Factorial of %d is: %d\n",num,fact);  
+
+#endif
+}
+
 
 /* END OF FILE ************************************************************************************/
