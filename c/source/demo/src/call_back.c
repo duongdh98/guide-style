@@ -1,66 +1,81 @@
 /***************************************************************************************************************
- * @detail          : Firmware wirite in free time and write for Soc nrf5xx
  * @auth            : duongdh                                                                                  
- * @day             : 8-jan-2022 
- * @file            : main.c                                                                            
+ * @day             : 28-dec-2021 
+ * @file            : arrays.c                                                                         
  * @dissaption      : File to create FW-Core . Coding in free time                                              
 ***************************************************************************************************************/
-
-/*  Indent using spaces
-    Tab width: 4 spaces
-    Line width: 100 characters
-    Line ending: LF (0x0A) */
 
 /* Public macros ---------------------------------------------------------------------------------*/
 /* Include ---------------------------------------------------------------------------------------*/
 
-#include "inc/app.h"
-#include "inc/data_type.h"
-#include "inc/loop.h"
-#include "inc/functions.h"
-#include "inc/call_back.h"
+#include "../inc/debug.h"
 
 /* Define ----------------------------------------------------------------------------------------*/
+
+#if (GD_CALL_BACK == DBG_ON)
+		#define		OPEN		1
+#endif
+#if (GD_CALL_BACK == DBG_OFF)
+		#define 	OPEN 		0
+#endif
 /* Private data types ----------------------------------------------------------------------------*/
 /* Public data types -----------------------------------------------------------------------------*/
 /* Private function prototypes -------------------------------------------------------------------*/
 /* Public function prototypes --------------------------------------------------------------------*/
 
-int main(int argc, char * argv[])
+typedef int (*callback)(int, int);
+void insertion_sort(int *array, int n, callback comparison);
+
+int ascending(int a, int b)
 {
-		start();
-		
-		/* data type */
-		size_data_type();
+    return a > b;
+}
 
-		/* loop */
-		while_loop();
-		for_loop();
-		do_while_loop();
-		nested_loop();
+int descending(int a, int b)
+{
+    a < b;
+}
 
-		/* Functions */
-		call_a_function();
+int even_first(int a, int b)
+{
+    /* code goes here */
+}
 
-		/* Array */
-		// mutil_dimensional();
- 		// passing_array_to_function();
- 		// return_array_form_a_function();
- 		// poiter_return_array();
-		// func_check_array();
+int odd_first(int a, int b)
+{
+    /* code goes here */
+}
 
-		/* pointers */
-		pointer_arithmetic();
- 		array_of_pointer();
- 		pointer_to_pointer();
- 		passing_pointer_to_function_in_c();
- 		return_pointer_from_function_in_c();
+void insertion_sort(int *array, int n, callback comparison)
+{
+    int i, j, key;
+    for(j = 1; j <= n-1; j++)
+    {
+        key = array[j];
+        i = j - 1;
+        while(i >= 0 && comparison(array[i], key))
+        {
+            array[i+1] = array[i];
+            i = i - 1;
+        }
+        array[i+1] = key;
+    }
+}
 
-		/* Call back function */
-		call_back();
-		
-		system("pause");
-		return 0;
+void call_back()
+{
+#if OPEN
+    int array[10] = {22,66,55,11,99,33,44,77,88,0};
+
+    insertion_sort(array,10, descending);
+
+    printf("after insertion_sort\n");
+
+    for(int i = 0; i < 10; i++)
+        printf("%d\t", array[i]);
+
+    printf("\n");
+#endif
 }
 
 /* END OF FILE ************************************************************************************/

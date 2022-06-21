@@ -59,6 +59,7 @@ extern "C" {
 		#define GD_SCOPE				DBG_OFF
 		#define GD_ARRAY				DBG_ON
 		#define GD_POINTER		  DBG_OFF
+		#define GD_CALL_BACK		DBG_ON
 
 #endif
 
