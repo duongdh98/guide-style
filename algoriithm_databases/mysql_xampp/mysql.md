@@ -3,6 +3,7 @@
 ## 1. [DBeaver community](#1)
 
 ## 2. [Setup Mysql in linux](#2)
+## 2.1 [Setup Docker Xampp in linux](#21)
 
 ## 3. [Commands mqsql](#3)
 ### 3.1 [Set or Change Password](#31)
@@ -176,6 +177,33 @@ Connect to MySQL this command in terminal:
 
 ```sh
   mysql -u [username] -p
+```
+
+## 2.1. <a id="21"></a> Setup Docker Xampp in linux
+**Pull docker image**
+- Pull mysql:
+```sh
+  > sudo docker pull mysql:latest
+```
+- Run mysql:
+```sh
+  > sudo docker run --name dev-mysql -e MYSQL_ROOT_PASSWORD=pass123 -d mysql:latest
+```
+
+- Pull phpmyadmin:
+```sh
+  > sudo docker pull phpmyadmin/phpmyadmin:latest
+``` 
+
+- Run docker phnadmin:
+```sh
+  > sudo docker run --name dev-phpmyadmin -d --link dev-mysql:db -p 7098:80 phpmyadmin/phpmyadmin
+```
+**Note**: Access phpmyadmin http://localhost:7098/
+
+- Access using CLI 
+```sh
+  > sudo docker exec -it dev-mysql bash
 ```
 
 ## 3. <a id="3"></a> Commands mqsql
