@@ -206,6 +206,15 @@ Connect to MySQL this command in terminal:
   > sudo docker exec -it dev-mysql bash
 ```
 
+- Connect Qt and Mysql 
+```sh
+  add to *.pro
+  > LIBS+=-L/usr/local/lib -lmysqlclient_r
+  > QT       += network
+  > QT       += sql
+  > QTPLUGIN += qsqlmysql
+```
+
 ## 3. <a id="3"></a> Commands mqsql
 
 ### 3.1 <a id="31"></a> Set or Change Password
