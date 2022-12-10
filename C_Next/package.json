@@ -1,0 +1,13 @@
+{
+  "name": "c_next",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "g++ -o main main.cpp inc/*.hpp src/*.cpp && clear && ./main"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
