@@ -3,47 +3,118 @@
 
 using namespace std;
 
-/* >>> Anime module =======================================================  */
-Animal::Animal() {
-    printf(">>> Init information for Animal ================ \n");
-    this->type = "animal type";
-    nType = "nAnimal type";
+/* >>> Example for Encapsulation  */
+Rectangle::Rectangle() {
+    // numOfCorner = 4;
+    setValues(100, 50, 4);
+}
+Rectangle::~Rectangle() {}
+
+void Rectangle::setValues(int w, int h, int c) {
+    mWidth = w;
+    mHeight = h;
+    numOfCorner = c;
 }
 
-Animal::~Animal() {
-    printf(">>> Clear information for animal =============== \n");
+int Rectangle::getArea(void) {
+    return mWidth * mHeight;
 }
 
-void Animal::getInfoAnimal() {
-    printf(">>> Get Information of cat : \n");
-    printf(">>> Type : %s \n", this->type);
+int Rectangle::getPerimeter(void) {
+    return 2 *  (mWidth + mHeight); 
 }
 
-void Animal::show() {
-    printf(">>> animal class ===================  \n");
+void Rectangle::printfInfomation() {
+    cout << __FUNCTION__ << ": Information of rectangle : \n";
+    cout << "Num Of Corner  : " << numOfCorner << endl;
+    cout << "Width          : " << mWidth << endl;
+    cout << "Heigh          : " << mHeight << endl;
+    cout << "Area           : " << getArea() << endl;
+    cout << "Perimeter      : " << getPerimeter() << endl;
 }
 
-/* >>> End anime module =======================================================  */
-
-/* >>> Cai module =======================================================  */
-Cat::Cat() {
-    printf(">>> Init information for cat ================ \n");
-    this->heigh = 50;
-    this->weigh = 1500;
+/* >>> Excample for Inheritance   */
+Person::Person() {
+    setPeople(123456789, "Duong");
 }
 
-Cat::~Cat() {
-    printf(">>> Clear information for cat =============== \n");
+Person::~Person() {}
+
+void Person::setPeople(int id, char *name) {
+    idCard = id;
+    strcpy(zName, name);
 }
 
-void Cat::getInfoCat() {
-    printf(">>> Get Information of cat : \n");
-    printf(">>> Heigh : %d \n", this->heigh);
-    printf(">>> Weigh : %d \n", this->weigh);
+int Person::getIdCard() {
+    return idCard;
 }
 
-void Cat::show() {
-    printf(">>> cat class ===================  \n");
+void Person::prinntfInfomationPerson() {
+    // cout << __FUNCTION__ << ": Information of rectangle : \n";
+    cout << "idCard  : " << idCard << endl;
+    cout << "Name    : " << zName << endl;
 }
 
-/* >>> End Cat module =======================================================  */
+Student::Student() {
+    idStudent = getIdCard();
+}
+
+Student::~Student() {}
+
+void Student::setStudent(float score) {
+    zScore = score;
+}
+
+void Student::prinntfInfomationStudent() {
+
+    cout << __FUNCTION__ << ": Information of student : \n";
+    prinntfInfomationPerson();
+    cout << "Score : " << zScore << endl;
+}
+
+/* Example for Polymorphism */
+/* Ex 1 */
+PrintfValues::PrintfValues(){}
+PrintfValues::~PrintfValues(){ }
+
+void PrintfValues::mPrintf(int i) {
+    cout << "Value <int>   : " << i << endl;
+}
+
+void PrintfValues::mPrintf(double f) {
+    cout << "Value <double> : " << f << endl;
+}
+
+void PrintfValues::mPrintf(char *c) {
+    cout << "Value <char> : " << c << endl;
+}
+
+/* Ex 2 */
+Pet::Pet(string n){
+    nName = n;
+}
+Pet::~Pet(){}
+
+string Pet::getSound() {
+    return "";
+}
+
+void Pet::makeSound(void) {
+    cout << nName << " says: " << getSound() << endl;
+}
+
+Cat::Cat(string n) : Pet(n){
+}
+Cat::~Cat(){};
+
+string Cat::getSound() {
+    return "Meow! Meow!";
+}
+
+Dog::Dog(string n) : Pet (n){
+}
+Dog::~Dog(){};
+
+string Dog::getSound() {
+     return "Woof! Woof!";
+}
