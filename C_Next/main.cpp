@@ -1,5 +1,6 @@
 #include <cstdio>
 #include "inc/oop.hpp"
+#include <set>
 
 using namespace std;
 
@@ -29,8 +30,11 @@ int main (int argc, char *argv[])
     Dog *zDog = new Dog("Doggie");
     zDog->makeSound();
     delete zDog;
-
     cout << "\n========================================= \n";
+
+    set<int> zCount;
+    zCount.insert(2);
+    zCount.insert(2);
     
     printf(">>> End ==================================================================== \n");
     system("pause");

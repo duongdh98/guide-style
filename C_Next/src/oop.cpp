@@ -126,4 +126,26 @@ template <class T> void bubbleSort(T a[], int n)
             if (a[j] < a[j - 1])
                 swap(a[j], a[j - 1]);
 }
-  
+
+/* Set */
+// Set là một dạng cấu trúc dữ liệu dùng để lưu trữ các phần tử không trùng lặp 
+// và được sắp xếp theo thứ tự tăng dần hoặc giảm dần. (Mặc định trong setset là 
+// tăng dần và chúng ta có thể viết lại hàm so sánh theo mục đích của chúng ta)
+
+/* List */
+// List trong C++ là một danh sách liên kết đôi được sử dụng làm tiêu chuẩn để xử lý các 
+// đối tượng chứa nhiều phần tử trong C++.
+
+// Danh sách liên kết đôi ở đây có nghĩa là từng Node trong danh sách sẽ chứa thông 
+// tin vị trí của Node đứng trước và sau nó, nên việc xác định vị trí của một Node trong danh sách 
+// sẽ trở nên dễ dàng hơn với độ phức tạp của thuật toán sẽ là O(1) mà thôi.
+
+/* Vector */
+// Vector trong C++ là các mảng động (dynamic array) dùng để lưu trữ dữ liệu. 
+// Khác với array – dùng để lưu trữ dữ liệu tuần tự và có bản chất tính, các vector có độ linh hoạt cao hơn nhiều. 
+// Vector có thể tự động resize khi có phần tử được chèn hay xoá khỏi array, trong khi đó array thường có kích thước cố định.
+
+/* Map */
+// Map trong C++ là một tập hợp các phần tử được sắp xếp theo thứ tự cụ thể, 
+// mà mỗi phần tử trong đó được hình thành bởi sự kết hợp của một cặp khóa và giá trị (key & value), 
+// với mỗi khóa là duy nhất trong map.
