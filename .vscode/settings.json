@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "xlsxio_read.h": "c",
+        "xlsxio_write.h": "c"
+    }
+}
