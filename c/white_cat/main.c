@@ -13,8 +13,8 @@
 
 /* Public macros ---------------------------------------------------------------------------------*/
 /* Include ---------------------------------------------------------------------------------------*/
-#include "stdio.h"
-#include "stdint.h"
+#include "inc/cmd.h"
+#include "inc/n_thread.h"
 
 /* Define ----------------------------------------------------------------------------------------*/
 /* Private data types ----------------------------------------------------------------------------*/
@@ -22,9 +22,32 @@
 /* Private function prototypes -------------------------------------------------------------------*/
 /* Public function prototypes --------------------------------------------------------------------*/
 
-int main(int argc, char * argv[])
+typedef struct {
+    int id;
+    char name[50];
+    float salary;
+} employee_t;
+
+void *thread_func(typedef struct employee_t *g_em)
+{   
+    for(;;) {
+        printf("ID : %d\n", g_em->id);
+        printf("Name : %s\n", g_em->name);
+        printf("Salary : %f\n", g_em->salary);
+        delay_ms(100);
+    }
+}
+
+int main(int argc, char *argv[])
 {
-    printf("white cat ============ \n");
+    pthread_t t1;
+    employee_t e1;
+    e1.id = 17;
+    strcpy(e1.name, "Dai Duong");
+    e1.salary = 5;
+
+    pthread_create(&t1, NULL, &thread_func, &e1);
+    pthread_join(t1, NULL);
     return 0;
 }
 

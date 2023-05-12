@@ -14,7 +14,7 @@
     goto :BUILD
 
 :BUILD
-    gcc -o main.exe inc/*.h src/*.c -lpthread main.c
+    g++ -o main.exe -I C:\libxl-4.1.2\include_cpp -L C:\libxl-4.1.2\bin main.cpp
     goto :RUN
 
 :RUN

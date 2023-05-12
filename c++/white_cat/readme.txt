@@ -1,8 +1,8 @@
 /***************************************************************************************************************
  * @detail          : Softmware wirite in free time and write for white cat
  * @auth            : duonghd                                                        
- * @day             : 12-may-2023
- * @file            : vn_en.h                                           
+ * @day             : 11-may-2023
+ * @file            : main.c                                              
  * @dissaption      : File to create white cat project . Coding in free time                                              
 ***************************************************************************************************************/
 
