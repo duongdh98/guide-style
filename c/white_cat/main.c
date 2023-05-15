@@ -26,7 +26,16 @@ int main(int argc, char *argv[])
 {
     thread_common_create();
 
-    while(1) {}
+    int i;
+    while(true) {
+        i++;
+        printf("loop : %d \n", i);
+        delay_ms(1000);
+        if (i == 7) {
+            should_terminate = true;
+        }
+    }
+    while(true) {}
     return 0;
 }
 

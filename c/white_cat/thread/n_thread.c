@@ -25,7 +25,8 @@
 /* === Common thread ==================== */
 void *thread_common(common_t *g_common) {
     
-    for(;;) {
+    should_terminate = false;
+    while(!should_terminate) {
         printf("Common thread running ...\n");
         delay_ms(500);
     }
