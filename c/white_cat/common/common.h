@@ -1,8 +1,8 @@
 /***************************************************************************************************************
  * @detail          : Softmware wirite in free time and write for white cat
  * @auth            : duonghd                                                        
- * @day             : 11-may-2023
- * @file            : main.c                                              
+ * @day             : 15-may-2023
+ * @file            : common.h                                      
  * @dissaption      : File to create white cat project . Coding in free time                                              
 ***************************************************************************************************************/
 
@@ -13,21 +13,20 @@
 
 /* Public macros ---------------------------------------------------------------------------------*/
 /* Include ---------------------------------------------------------------------------------------*/
-#include "cmd/cmd.h"
-#include "thread/n_thread.h"
+#include "cfg.h"
 
 /* Define ----------------------------------------------------------------------------------------*/
+#define MAX_COMMON_CHAR     100
+
 /* Private data types ----------------------------------------------------------------------------*/
 /* Public data types -----------------------------------------------------------------------------*/
+typedef struct {
+    int val_common;
+    char str_common[MAX_COMMON_CHAR];
+} common_t;
+
 /* Private function prototypes -------------------------------------------------------------------*/
 /* Public function prototypes --------------------------------------------------------------------*/
-
-int main(int argc, char *argv[])
-{
-    thread_common_create();
-
-    while(1) {}
-    return 0;
-}
+void thread_common_func(common_t *g_common);
 
 /* END OF FILE ************************************************************************************/

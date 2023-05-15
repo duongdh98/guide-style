@@ -10,14 +10,20 @@
 
 :CLEAR
     cls
-    del main.exe > nul
+    if exist "main.exe" (
+        del main.exe > nul
+    )
     goto :BUILD
 
 :BUILD
-    gcc -o main.exe inc/*.h src/*.c -lpthread main.c
+    gcc -o main.exe cmd/*.h cmd/*.c common/*.h common/*.c thread/*.h thread/*.c -lpthread main.c
+    if %ERRORLEVEL% NEQ 0 (
+        goto :DONE
+    )
     goto :RUN
 
 :RUN
+    cls
     main.exe
     goto :DONE
 

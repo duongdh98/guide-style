@@ -1,8 +1,8 @@
 /***************************************************************************************************************
  * @detail          : Softmware wirite in free time and write for white cat
  * @auth            : duonghd                                                        
- * @day             : 11-may-2023
- * @file            : main.c                                              
+ * @day             : 12-may-2023
+ * @file            : cmd.c                                      
  * @dissaption      : File to create white cat project . Coding in free time                                              
 ***************************************************************************************************************/
 
@@ -13,8 +13,8 @@
 
 /* Public macros ---------------------------------------------------------------------------------*/
 /* Include ---------------------------------------------------------------------------------------*/
-#include "cmd/cmd.h"
-#include "thread/n_thread.h"
+#include <time.h>
+#include "cmd.h"
 
 /* Define ----------------------------------------------------------------------------------------*/
 /* Private data types ----------------------------------------------------------------------------*/
@@ -22,12 +22,16 @@
 /* Private function prototypes -------------------------------------------------------------------*/
 /* Public function prototypes --------------------------------------------------------------------*/
 
-int main(int argc, char *argv[])
+/* === deflay function ===*/
+void delay_ms(int time)
 {
-    thread_common_create();
+    long pause;
+    clock_t now,then;
 
-    while(1) {}
-    return 0;
+    pause = time * (CLOCKS_PER_SEC/1000);
+    now = then = clock();
+    while( (now-then) < pause )
+        now = clock();
 }
 
 /* END OF FILE ************************************************************************************/
