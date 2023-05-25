@@ -14,6 +14,8 @@
 /* Public macros ---------------------------------------------------------------------------------*/
 /* Include ---------------------------------------------------------------------------------------*/
 #include "cmd/cmd.h"
+#include "common/defines.h"
+#include "files/files.h"
 #include "thread/n_thread.h"
 
 /* Define ----------------------------------------------------------------------------------------*/
@@ -24,17 +26,7 @@
 
 int main(int argc, char *argv[])
 {
-    thread_common_create();
-
-    int i;
-    while(true) {
-        i++;
-        printf("loop : %d \n", i);
-        delay_ms(1000);
-        if (i == 7) {
-            should_terminate = true;
-        }
-    }
+    cmd_create_folder("python/excelsss/a.txt");
     while(true) {}
     return 0;
 }

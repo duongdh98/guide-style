@@ -10,13 +10,13 @@
 
 :CLEAR
     cls
-    if exist "white_cat.exe" (
-        del white_cat.exe > nul
+    if exist "mini_wcat.exe" (
+        del mini_wcat.exe > nul
     )
     goto :BUILD
 
 :BUILD
-    gcc -o white_cat.exe cmd/*.h cmd/*.c common/*.h common/*.c shm/*.h shm/*.c thread/*.h thread/*.c -lpthread main.c
+    gcc -o mini_wcat.exe common/*.h common/*.c cmd/*.h cmd/*.c files/*.h files/*.c -lpthread main.c
     if %ERRORLEVEL% NEQ 0 (
         goto :DONE
     )
@@ -24,7 +24,7 @@
 
 :RUN
     cls
-    white_cat.exe
+    mini_wcat.exe
     goto :DONE
 
 :DONE

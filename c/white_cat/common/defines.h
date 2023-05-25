@@ -1,8 +1,8 @@
 /***************************************************************************************************************
  * @detail          : Softmware wirite in free time and write for white cat
  * @auth            : duonghd                                                        
- * @day             : 12-may-2023
- * @file            : cmd.c                                      
+ * @day             : 11-may-2023
+ * @file            : main.c                                              
  * @dissaption      : File to create white cat project . Coding in free time                                              
 ***************************************************************************************************************/
 
@@ -13,40 +13,21 @@
 
 /* Public macros ---------------------------------------------------------------------------------*/
 /* Include ---------------------------------------------------------------------------------------*/
-#include <time.h>
-#include "cmd.h"
+#include "cfg.h"
 
 /* Define ----------------------------------------------------------------------------------------*/
-/* Private data types ----------------------------------------------------------------------------*/
-/* Public data types -----------------------------------------------------------------------------*/
-/* Private function prototypes -------------------------------------------------------------------*/
-/* Public function prototypes --------------------------------------------------------------------*/
+/* Define path python for excels */
+#define PY_EXCEL            "python/excels"
+#define PY_EXCEL_FORMART    PY_EXCEL "/formart.py"
+#define PY_EXCEL_PARSE      PY_EXCEL "/parse.py"
 
-/* === deflay function ===*/
-void delay_ms(int time)
-{
-    long pause;
-    clock_t now,then;
+/* Define path python for jsons */
+#define PY_JSON             "python/jsons"
 
-    pause = time * (CLOCKS_PER_SEC/1000);
-    now = then = clock();
-    while( (now-then) < pause )
-        now = clock();
-}
+/* Define path python for texts */
+#define PY_TEXT             "python/texts"
 
-/* === create folder === */
-void cmd_create_folder(char *path) {
-    mkdir(path);
-}
-
-/* === create file === */
-void cmd_create_file(char *path) {
-
-}
-
-/* === delete folder/file === */
-void cmd_delete(char *path) {
-
-}
+/* Define path python for xmls */
+#define PY_xmls             "python/xmls"
 
 /* END OF FILE ************************************************************************************/

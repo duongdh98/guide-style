@@ -24,4 +24,13 @@
 /* === deflay function ===*/
 void delay_ms(int time);
 
+/* === create folder === */
+void cmd_create_folder(char *path);
+
+/* === create file === */
+void cmd_create_file(char *path);
+
+/* === delete folder/file === */
+void cmd_delete(char *path);
+
 /* END OF FILE ************************************************************************************/
