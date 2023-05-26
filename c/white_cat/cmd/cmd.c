@@ -45,8 +45,19 @@ void cmd_create_file(char *path) {
 }
 
 /* === delete folder/file === */
-void cmd_delete(char *path) {
+void cmd_delete_folder(char *path) {
+    rmdir(path);
+}
 
+/* === delete folder/file === */
+void cmd_delete_file(char *path) {
+    remove(path);
+}
+
+void run_python(char *path) {
+    char cmd[100];
+    sprintf(cmd, "py %s", path);
+    system(cmd);
 }
 
 /* END OF FILE ************************************************************************************/

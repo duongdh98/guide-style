@@ -30,4 +30,12 @@
 /* Define path python for xmls */
 #define PY_xmls             "python/xmls"
 
+/* Public data types -----------------------------------------------------------------------------*/
+typedef enum {
+
+    PRJ_NONE,
+    PRJ_WHITE_CAT,
+
+} prj_t;
+
 /* END OF FILE ************************************************************************************/

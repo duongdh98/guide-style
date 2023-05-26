@@ -15,8 +15,8 @@
 /* Include ---------------------------------------------------------------------------------------*/
 #include "cmd/cmd.h"
 #include "common/defines.h"
+#include "common/vn_en.h"
 #include "files/files.h"
-#include "thread/n_thread.h"
 
 /* Define ----------------------------------------------------------------------------------------*/
 /* Private data types ----------------------------------------------------------------------------*/
@@ -26,7 +26,26 @@
 
 int main(int argc, char *argv[])
 {
-    cmd_create_folder("python/excelsss/a.txt");
+    prj_t ret;
+    ret = PRJ_WHITE_CAT;
+
+    switch (ret)
+    {
+    case PRJ_NONE:
+    {
+
+    }
+        break;
+    case PRJ_WHITE_CAT:
+    {
+        printf("%s\n\n", DISPLAY_START);
+        printf("\n%s", DISPLAY_END);
+    }
+        break;
+
+    default:
+        break;
+    }
     while(true) {}
     return 0;
 }
