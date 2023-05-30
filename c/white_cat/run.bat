@@ -16,7 +16,7 @@
     goto :BUILD
 
 :BUILD
-    gcc -o white_cat.exe cmd/*.h cmd/*.c common/*.h common/*.c shm/*.h shm/*.c thread/*.h thread/*.c -lpthread main.c
+    gcc -o white_cat.exe cmd/*.h cmd/*.c common/*.h common/*.c files/*.h files/*.c thread/*.h thread/*.c -lpthread main.c
     if %ERRORLEVEL% NEQ 0 (
         goto :DONE
     )

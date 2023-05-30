@@ -36,7 +36,9 @@ void delay_ms(int time)
 
 /* === create folder === */
 void cmd_create_folder(char *path) {
-    mkdir(path);
+    char cmd[200];
+    sprintf(cmd, "powershell new-item -path %s -itemType directory >nul", path);
+    system(cmd);
 }
 
 /* === create file === */
@@ -45,8 +47,10 @@ void cmd_create_file(char *path) {
 }
 
 /* === delete folder/file === */
-void cmd_delete_folder(char *path) {
-    rmdir(path);
+void cmd_delete_path(char *path) {
+    char cmd[200];
+    sprintf(cmd, "powershell remove-item %s/* -recurse >nul", path);
+    system(cmd);
 }
 
 /* === delete folder/file === */
@@ -55,7 +59,7 @@ void cmd_delete_file(char *path) {
 }
 
 void run_python(char *path) {
-    char cmd[100];
+    char cmd[254];
     sprintf(cmd, "py %s", path);
     system(cmd);
 }

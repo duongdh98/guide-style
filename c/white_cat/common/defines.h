@@ -16,20 +16,6 @@
 #include "cfg.h"
 
 /* Define ----------------------------------------------------------------------------------------*/
-/* Define path python for excels */
-#define PY_EXCEL            "python/excels"
-#define PY_EXCEL_FORMART    PY_EXCEL "/formart.py"
-#define PY_EXCEL_PARSE      PY_EXCEL "/parse.py"
-
-/* Define path python for jsons */
-#define PY_JSON             "python/jsons"
-
-/* Define path python for texts */
-#define PY_TEXT             "python/texts"
-
-/* Define path python for xmls */
-#define PY_xmls             "python/xmls"
-
 /* Public data types -----------------------------------------------------------------------------*/
 typedef enum {
 

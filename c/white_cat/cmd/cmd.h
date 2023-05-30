@@ -31,7 +31,7 @@ void cmd_create_folder(char *path);
 void cmd_create_file(char *path);
 
 /* === delete folder/file === */
-void cmd_delete_folder(char *path);
+void cmd_delete_path(char *path);
 
 /* === delete folder/file === */
 void cmd_delete_file(char *path);

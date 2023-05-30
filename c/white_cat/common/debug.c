@@ -1,8 +1,8 @@
 /***************************************************************************************************************
  * @detail          : Softmware wirite in free time and write for white cat
  * @auth            : duonghd                                                        
- * @day             : 25-may-2023
- * @file            : files.h                                           
+ * @day             : 29-may-2023
+ * @file            : debug.h                                              
  * @dissaption      : File to create white cat project . Coding in free time                                              
 ***************************************************************************************************************/
 
@@ -13,17 +13,34 @@
 
 /* Public macros ---------------------------------------------------------------------------------*/
 /* Include ---------------------------------------------------------------------------------------*/
-#include <dirent.h>
-#include "../common/debug.h"
-
+#include "debug.h"
+#include "vn_en.h"
+#include "defines.h"
 /* Define ----------------------------------------------------------------------------------------*/
+#define MAX_BUFFER 254
+
 /* Private data types ----------------------------------------------------------------------------*/
 /* Public data types -----------------------------------------------------------------------------*/
 /* Private function prototypes -------------------------------------------------------------------*/
 /* Public function prototypes --------------------------------------------------------------------*/
+void v_printf_log(const char* fmt, ...) {
+    
+    va_list args;
+    char buffer[MAX_BUFFER];
+    va_start(args, fmt);
+    vsprintf(buffer, fmt, args);
+    printf("%s", buffer);
+}
 
-// === Check dir and file exit ============== 
-wcat_err_t path_dir_exit(char *path);
-wcat_err_t path_file_exit(char *path);
-
+void printf_err(wcat_err_t err) {
+    switch (err)
+    {
+    case WERR_PATH_NOT_FOUND:
+        printf("%s", ERR_1);
+        break;
+    
+    default:
+        break;
+    }
+}
 /* END OF FILE ************************************************************************************/
