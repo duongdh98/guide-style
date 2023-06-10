@@ -1,0 +1,1 @@
+gcc -o main main/main.c app/bluetooth/*.h app/bluetooth/*.c app/common/*.h app/common/*.c middle/bluetooth/*.h middle/bluetooth/*.c middle/common/*.h middle/common/*.c driver/bluetooth/*.h driver/bluetooth/*.c driver/common/*.h driver/common/*.c
