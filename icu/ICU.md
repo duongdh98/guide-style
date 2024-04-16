@@ -57,7 +57,7 @@ repo sync -c -j4 --no-tags
 
 **Open turbox sdkmanager:**
 ```sh
-- turbox-sdkmanager-setup.sh --os-version 18.04
+turbox-sdkmanager-setup.sh --os-version 18.04
 ```
 - Refer: https://docs.thundercomm.com/turbox_doc/tools/turbox-sdkmanager-user-guide
 
@@ -131,20 +131,34 @@ fastboot reboot
 
 **Add apn:**
 ```sh
-    - echo -e "at+cgdcont=1,\"IPV4V6\",\"icu\",\"0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0\",0,0,0,1\r\n" >dev/smd7
+echo -e "at+cgdcont=1,\"IPV4V6\",\"icu\",\"0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0\",0,0,0,1\r\n" >dev/smd7
 ```
 **Check SIM is OK ?**
 ```sh
-    - echo -e "AT+CPIN?\r\n" > /dev/smd7
-    - echo -e "AT+CFUN?\r\n" > /dev/smd7
-    - echo -e "AT+CFUN=0\r\n" > /dev/smd7
-    - echo -e "AT+CFUN=1\r\n" > /dev/smd7
-    - echo -e "AT+COPS?\r\n" > /dev/smd7
+echo -e "AT+CPIN?\r\n" > /dev/smd7
+```
+```sh
+echo -e "AT+CFUN?\r\n" > /dev/smd7
+```
+```sh
+echo -e "AT+CFUN=0\r\n" > /dev/smd7
+```
+```sh
+echo -e "AT+CFUN=1\r\n" > /dev/smd7
+```
+```sh
+echo -e "AT+COPS?\r\n" > /dev/smd7
 ```
 ### <a id="8-2"></a> 8.2 HDMI Component
 ```sh
-    - adb root
-    - adb reboot bootloader
-    - fastboot oem select-display-panel truly_ext_hd_plus_vid
-    - fastboot reboot
+adb root
+```
+```sh
+adb reboot bootloader
+```
+```sh
+fastboot oem select-display-panel truly_ext_hd_plus_vid
+```
+```sh
+fastboot reboot
 ```
