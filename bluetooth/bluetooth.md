@@ -28,7 +28,7 @@
 | Kích thước gói dữ liệu (Packet Size) | Larger (~1021 bytes) *(gói dữ liệu lớn hơn)*     | Smaller (~251 bytes) *(gói dữ liệu nhỏ hơn)*           |
 | Tương thích ngược (Backward Compatibility) | Doesn’t support BLE *(không hỗ trợ BLE)*        | Can coexist with Classic (dual-mode chip like ESP32) *(có thể hoạt động song song với Classic – ví dụ chip ESP32)* |
 
-![Bluetooth Comparison](bluetooth_structure.png)
+![bluetooth_structure](bluetooth_structure.png)
 
 ## 2. Layers (Các lớp)
 
