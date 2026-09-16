@@ -1,6 +1,6 @@
 /**
   **************************************************************************************************
-  * @file   logger.c
+  * @file   test.c
   * @brief  Starting point of this project.
   * @by     duonghd | 27-July-2024.
   **************************************************************************************************
@@ -13,15 +13,10 @@
 
 /* Includes --------------------------------------------------------------------------------------*/
 
-/** Middleware */
 #include "logger.h"
-#include "test.h"
-#include "zscript.h"
 
-/** C Library */
-#include <pthread.h>
-#include <unistd.h>
-
+#include <stdio.h>
+#include <stdarg.h>
 
 /* Private macros --------------------------------------------------------------------------------*/
 
@@ -30,39 +25,48 @@
 /* Private variables ----------------------------------------------------------------------------*/
 
 /* Private function prototypes -------------------------------------------------------------------*/
-static void *zapp_task(void *arg);
-
+static void dumplist(int, ...);
+static void display(int num, ...);
+ 
 /* Public function bodies ------------------------------------------------------------------------*/
 
-void zapp_open(void)
+void test_open(void)
 {
-    pthread_t thread;
-    pthread_create(&thread, NULL, zapp_task, NULL);
-    pthread_join(thread, NULL);
+    dumplist(2, 4, 8); // 1-4, 0-8
+    dumplist(3, 6, 9, 7); // 2-6, 1-9, 0-7
+
+    display(4, 'A', 'B', 'C', 'D');
+    
+    return;
 }
 
 /* Private function bodies -----------------------------------------------------------------------*/
-
-static void *zapp_task(void *arg)
+static void dumplist(int n, ...)
 {
-    logger_open();
+    va_list p; int i;
+    va_start(p, n);
 
-    char json[] =
-    "{"
-    "\"name\":\"duonghd\","
-    "\"count\":100"
-    "}";
-
-    zjtok_t* p_script = NULL;
-
-    zscript_open(&p_script, json);
-    // while (1)
-    // {
-    //     DBG_INFO("%s: Task is running...", __FUNCTION__);
-    //     sleep(1);
-    // }
-
-    return NULL;
+    while(n-->0)
+    {
+        i = va_arg(p, int);
+        printf("N: %d, ARG: %d", n, i); 
+    }
+    va_end(p);
+    printf("\n");
 }
 
+static void display(int num, ...)
+{
+    char c, c1; int j;
+    va_list ptr, ptr1;
+    va_start(ptr, num);
+    va_start(ptr1, num);
+    for(j=1; j<=num; j++)
+    {
+        c = va_arg(ptr, int);
+        printf("%c", c);
+        c1 = va_arg(ptr1, int);
+        printf("%d\n", c1);
+    }
+}
 /* END OF FILE ************************************************************************************/

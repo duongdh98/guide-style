@@ -50,6 +50,9 @@ target_include_directories(driver
 file(GLOB MID_SOURCES
     ${MID_DIR}/cli/*.c
     ${MID_DIR}/logger/*.c
+    ${MID_DIR}/zscript/*.c
+    ${MID_DIR}/jsmn/*.c
+    ${MID_DIR}/test/*.c
 )
 
 add_library(mid STATIC
@@ -60,6 +63,10 @@ target_include_directories(mid
     PUBLIC
         ${MID_DIR}/cli
         ${MID_DIR}/logger
+        ${MID_DIR}/zscript
+        ${MID_DIR}/jsmn
+        ${MID_DIR}/test
+        ${MID_DIR}/test
 )
 
 target_link_libraries(mid
